@@ -53,6 +53,8 @@ h3{font-size:1rem;font-weight:500}
 .day .dd span{font-weight:400;font-size:.8rem;color:var(--muted)}
 .day .dk{font-size:.72rem;letter-spacing:.06em;text-transform:uppercase;color:var(--muted);margin-top:10px}
 .day .dt{margin:0;white-space:pre-line;overflow-wrap:anywhere;line-height:1.45}
+.focus .fatto{margin:14px 0 0}
+.focus .fatto b{color:var(--fg);font-weight:600;margin-right:4px}
 .lista ol,.focus ol{margin:10px 0 0;padding-left:1.3rem;display:flex;flex-direction:column;gap:6px}
 .lista li,.focus li{font-weight:500}
 .lista li .m,.focus li .m{font-family:var(--mono);font-size:.8rem;font-weight:400;margin-left:6px}
@@ -122,24 +124,8 @@ footer{font-size:.78rem;color:var(--muted)}
 
     <section class="card focus">
       <h2>Su cosa mi sto concentrando adesso</h2>
-      <p class="note">L'obiettivo e il lavoro fatto nelle ultime due giornate.</p>
-      <div class="days"><div class="day"><div class="dd">26 ott 2026 <span>ultima giornata</span></div><div class="dk">Obiettivo del giorno</div><p class="dt">PRIMA: chiudere Esercizio 3 (ProfessionRepository → Service → GET nel Controller, provata da Postman). POI: Esercizio 4.
-
-Esercizio 4: Insert, update e delete (API Rest - POST, PUT e DELETE)
-Aggregazione dei criteri
-1. Creare un endpoint per l&#x27;inserimento di una nuova Profession nella tabella Profession.
-2. Creare un endpoint per l&#x27;eliminazione di una Profession dalla tabella lavori.
-3. Creare un endpoint che consenta di effettuare la modifica del nome di una Profession
-ripasso degli argomenti trattati, insistere sulle classi java, entita&#x27; e creazione nuova chiamata  REST sul Controller.
-Introduzione al Promting
-EXTRA:
-Esercizio 4
-Esercizio 5</p><div class="dk">Fatto e imparato</div><p class="dt">rafforzato un po i termini e vocaboli usati nel progetto, ancora da consolidare</p></div><div class="day"><div class="dd">23 ott 2026 <span>giornata precedente</span></div><div class="dk">Obiettivo del giorno</div><p class="dt">settings workflow
-
-Esercizio 3: API Rest - GET
-1. Creare una nuova entità &quot;Profession&quot; (sia tabella DB che classe Java)
-2. Implementare una nuova chiamata REST sul Controller di tipo GET &quot;getProfessionByPerson&quot;
-3. La chiamata dovrà prendere in input nome e cognome della persona, e dovrà restituire in output il lavoro della persona (i lavori saranno salvati nella tabella &quot;Profession&quot;, e messi in join con la tabella &quot;Person&quot;)</p><div class="dk">Fatto e imparato</div><p class="dt">inserimento dati nella tabella di mySQL,  qualche termine che devo ripassare e familiarizzarmi</p></div></div>
+      <ol><li>Esercizio 5: validazione dell&#x27;input e endpoint GET getNamesByChar</li><li>Terminologia: annotazioni vs metodi, @Entity, @RequestBody</li><li>Basi Java: classe vs oggetto, costruttore</li></ol>
+      <p class="note fatto"><b>Ultimo lavoro fatto</b> Esercizi 3 e 4 completati (API REST GET, POST, PUT, DELETE testate con Postman), esercizio 5 avviato. <span class="m">(26 ott 2026)</span></p>
     </section>
 
     <section class="card lista">
