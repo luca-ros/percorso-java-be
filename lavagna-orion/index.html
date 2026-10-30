@@ -177,7 +177,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
       <!-- Etichette delle sezioni: stesso ordine dello schizzo del tutor -->
       <div class="sec" style="left:40px;top:20px"><b>1</b>Entità</div>
       <div class="sec" style="left:40px;top:490px"><b>2</b>Dati di esempio</div>
-      <div class="sec" style="left:430px;top:490px"><b>3</b>La partita in chiaro</div>
+      <div class="sec" style="left:640px;top:490px"><b>3</b>La partita in chiaro</div>
       <div class="sec" style="left:40px;top:980px"><b>4</b>Controller e API</div>
       <div class="sec" style="left:430px;top:980px"><b>5</b>Pagina web risultato</div>
       <div class="sec" style="left:800px;top:980px"><b>6</b>Che endpoint creare?</div>
@@ -188,8 +188,8 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
         <h2>Player <small>tabella player</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
-          <li><span class="key no">·</span><span>firstName</span></li>
-          <li><span class="key no">·</span><span>lastName</span></li>
+          <li><span class="key no">·</span><span>first_name</span></li>
+          <li><span class="key no">·</span><span>last_name</span></li>
         </ul>
       </section>
 
@@ -197,12 +197,12 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
         <h2>Match <small>tabella match</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
-          <li id="f-p1"><span class="key fk">FK</span><span class="name">player1<em>→ Player · @ManyToOne</em></span></li>
-          <li id="f-p2"><span class="key fk">FK</span><span class="name">player2<em>→ Player · @ManyToOne</em></span></li>
-          <li id="f-win"><span class="key fk">FK</span><span class="name">winner<em>→ Player · null finché non finisce</em></span></li>
+          <li id="f-p1"><span class="key fk">FK</span><span class="name">player_1_id<em>→ player · @ManyToOne</em></span></li>
+          <li id="f-p2"><span class="key fk">FK</span><span class="name">player_2_id<em>→ player · @ManyToOne</em></span></li>
+          <li id="f-win"><span class="key fk">FK</span><span class="name">winner_id<em>→ player · null finché non finisce</em></span></li>
           <li><span class="key no">·</span><span class="name">status<em>scheduled · in_progress · finished</em></span></li>
-          <li><span class="key no">·</span><span class="name">createdAt<em>dato tecnico: quando nasce la riga</em></span></li>
-          <li><span class="key no">·</span><span class="name">plannedDate<em>quando si gioca (la vede l'utente)</em></span></li>
+          <li><span class="key no">·</span><span class="name">created_at<em>dato tecnico: quando nasce la riga</em></span></li>
+          <li><span class="key no">·</span><span class="name">planned_date<em>quando si gioca (la vede l'utente)</em></span></li>
         </ul>
       </section>
 
@@ -210,16 +210,16 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
         <h2>MatchSet <small>tabella match_set</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
-          <li id="f-match"><span class="key fk">FK</span><span class="name">match<em>→ Match · @ManyToOne</em></span></li>
-          <li><span class="key no">·</span><span class="name">setNumber<em>ordine del set nella partita</em></span></li>
-          <li><span class="key no">·</span><span>player1Points</span></li>
-          <li><span class="key no">·</span><span>player2Points</span></li>
+          <li id="f-match"><span class="key fk">FK</span><span class="name">match_id<em>→ match · @ManyToOne</em></span></li>
+          <li><span class="key no">·</span><span class="name">set_number<em>ordine del set nella partita</em></span></li>
+          <li><span class="key no">·</span><span>player_1_points</span></li>
+          <li><span class="key no">·</span><span>player_2_points</span></li>
         </ul>
       </section>
 
       <!-- 2 · DATI DI ESEMPIO -->
       <section class="item card datacard" id="c-data" data-x="40" data-y="530">
-        <h2>Tabelle <small>corrette</small></h2>
+        <h2>Tabelle <small>nomi delle colonne nel DB</small></h2>
         <div class="tbl">
           <table><caption>player</caption>
             <tr><th>id</th><th>first_name</th><th>last_name</th></tr>
@@ -227,11 +227,11 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
             <tr><td>2</td><td>Alessandro</td><td>Le Mura</td></tr>
           </table>
           <table><caption>match</caption>
-            <tr><th>id</th><th>p1</th><th>p2</th><th>status</th><th>winner</th><th>planned</th></tr>
-            <tr><td>1</td><td>1</td><td>2</td><td><span class="fixed">finished</span></td><td><span class="fixed">1</span></td><td>31/10</td></tr>
+            <tr><th>id</th><th>player_1_id</th><th>player_2_id</th><th>status</th><th>winner_id</th><th>planned_date</th></tr>
+            <tr><td>1</td><td>1</td><td>2</td><td><span class="fixed">finished</span></td><td><span class="fixed">1</span></td><td>2026-10-31</td></tr>
           </table>
           <table><caption>match_set</caption>
-            <tr><th>id</th><th>match</th><th>set_n</th><th>p1</th><th>p2</th></tr>
+            <tr><th>id</th><th>match_id</th><th>set_number</th><th>player_1_points</th><th>player_2_points</th></tr>
             <tr><td>1</td><td>1</td><td>1</td><td>11</td><td>2</td></tr>
             <tr><td>2</td><td>1</td><td>2</td><td>7</td><td>11</td></tr>
             <tr><td>3</td><td>1</td><td>3</td><td>13</td><td>11</td></tr>
@@ -241,7 +241,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
       </section>
 
       <!-- 3 · LA PARTITA IN CHIARO -->
-      <section class="item card page" id="c-plain" data-x="430" data-y="530">
+      <section class="item card page" id="c-plain" data-x="640" data-y="530">
         <h2>Luca vs Alessandro</h2>
         <div class="score">
           <div class="meta">status: <b>finished</b> · vince Luca 3 set a 1</div>
@@ -261,7 +261,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
         <div class="body">
           <p><span class="verb">GET</span> → serve sapere player, match (match_id) e set (player_points)</p>
           <ul class="files">
-            <li><code>Player.java</code><em>@Entity · id, firstName, lastName</em></li>
+            <li><code>Player.java</code><em>@Entity · tabella player</em></li>
             <li><code>Match.java</code><em>@Entity</em></li>
             <li><code>MatchSet.java</code><em>@Entity</em></li>
             <li><code>PlayerController.java</code></li>
@@ -285,7 +285,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
             <span>13 – 11</span><span></span><span>set 3</span>
             <span>11 – 5</span><span></span><span>set 4</span>
           </div>
-          <div class="src">↳ match_set.player1_points – player2_points, in ordine di set_number</div>
+          <div class="src">↳ match_set.player_1_points – player_2_points, in ordine di set_number</div>
         </div>
       </section>
 
@@ -309,14 +309,15 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
         <div class="grip"><span>Regole imparate</span></div>
         <ul>
           <li>I dati di esempio devono raccontare una storia coerente</li>
-          <li>Nomi in inglese: camelCase in Java, snake_case nel DB</li>
+          <li>Nomi in inglese; colonne del DB in snake_case: first_name, player_1_id</li>
+          <li>Le chiavi esterne finiscono sempre con _id: player_1_id, match_id</li>
           <li>Evita nomi già usati da Java: Set → MatchSet</li>
           <li>PK identifica la riga, FK punta a un'altra tabella</li>
           <li>All'utente si mostrano date reali, non quelle tecniche</li>
         </ul>
       </aside>
 
-      <aside class="item note" id="n-steps" data-x="1080" data-y="330">
+      <aside class="item note" id="n-steps" data-x="1080" data-y="390">
         <div class="grip"><span>Il metodo</span></div>
         <ol>
           <li class="done">Dati di esempio coerenti ✓</li>
@@ -383,8 +384,8 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
 
   // ---------- linee delle relazioni ----------
   const EDGES=[
-    {from:'f-p1',to:'c-player',label:'player1_id'},
-    {from:'f-p2',to:'c-player',label:'player2_id'},
+    {from:'f-p1',to:'c-player',label:'player_1_id'},
+    {from:'f-p2',to:'c-player',label:'player_2_id'},
     {from:'f-win',to:'c-player',label:'winner_id'},
     {from:'f-match',to:'c-match',label:'match_id'},
     {from:'c-endpoint',to:'c-page',label:'1 chiamata → DTO',muted:true}
