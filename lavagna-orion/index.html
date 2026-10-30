@@ -267,7 +267,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
             <li><code>PlayerController.java</code></li>
             <li><code>MatchController.java</code></li>
           </ul>
-          <p class="open">Da decidere: in quale Controller va l'endpoint del risultato → 6</p>
+          <p class="open">Deciso: GET /api/matches/{id}/result va in MatchController (la risorsa dell'URL è il match)</p>
         </div>
       </section>
 
@@ -291,7 +291,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
 
       <!-- 6 · CHE ENDPOINT CREARE -->
       <section class="item card endpoint" id="c-endpoint" data-x="800" data-y="1020">
-        <h2>Endpoint scelto <small>una chiamata</small></h2>
+        <h2>Endpoint scelto <small>in MatchController</small></h2>
         <div class="body">
           <code><span class="verb">GET</span> /api/matches/{id}/result</code>
           <p>Una sola chiamata invece di quattro. Restituisce un <b>DTO</b> (MatchResultDto) con solo i dati della pagina: nomi, data, vincitore, set.</p>
@@ -300,8 +300,8 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
 
       <aside class="item note question" id="n-question" data-x="800" data-y="1220">
         <div class="grip"><span>Domanda aperta · siamo qui</span></div>
-        <strong>In quale Controller metti GET /api/matches/{id}/result?</strong>
-        PlayerController, MatchController o uno nuovo? Perché?
+        <strong>MatchController chiede il risultato al MatchService. Di quali Repository ha bisogno il Service?</strong>
+        Deciso: l'endpoint va in MatchController, perché la risorsa dell'URL è il match.
       </aside>
 
       <!-- APPUNTI -->
@@ -314,18 +314,19 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
           <li>Evita nomi già usati da Java: Set → MatchSet</li>
           <li>PK identifica la riga, FK punta a un'altra tabella</li>
           <li>All'utente si mostrano date reali, non quelle tecniche</li>
+          <li>Il Controller si sceglie dalla risorsa dell'URL, non dalle tabelle che legge</li>
         </ul>
       </aside>
 
-      <aside class="item note" id="n-steps" data-x="1080" data-y="390">
+      <aside class="item note" id="n-steps" data-x="1080" data-y="440">
         <div class="grip"><span>Il metodo</span></div>
         <ol>
           <li class="done">Dati di esempio coerenti ✓</li>
           <li class="done">Entità e campi ✓</li>
           <li class="done">Relazioni ✓</li>
           <li class="done">Output della pagina ✓</li>
-          <li>Endpoint ← siamo qui</li>
-          <li class="todo">Strati: Controller · Service · Repository</li>
+          <li class="done">Endpoint ✓</li>
+          <li>Strati: Controller · Service · Repository ← siamo qui</li>
         </ol>
       </aside>
 
