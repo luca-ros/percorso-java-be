@@ -1,0 +1,642 @@
+<!doctype html>
+<html lang="it">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<meta name="robots" content="noindex">
+<style>:root{padding-top:env(safe-area-inset-top,0px);padding-bottom:env(safe-area-inset-bottom,0px)}body{margin:0}img{max-width:100%}[hidden]{display:none!important}</style>
+<title>Lavagna Orion TT</title>
+<meta name="claude:viewport-fit-sides" content="cover">
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="stylesheet" href="https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@600;700&family=IBM+Plex+Sans:wght@400;500;600&family=IBM+Plex+Mono:wght@400;500&display=swap">
+<style>
+/* Layout: una lavagna a quadretti come un foglio di progettazione; schede-entità trascinabili, linee delle relazioni, penna per disegnare sopra */
+:root{
+  --paper:#f5f7f6; --grid:#dfe6e3; --card:#ffffff; --ink:#1d2a2e; --muted:#5b6b6f;
+  --line:#c9d3d0; --table:#1f6b54; --rubber:#c8322b; --note:#fff3b8; --note-ink:#3d3510;
+  --chip:#e8f1ed; --shadow:0 1px 2px rgba(20,40,40,.08),0 6px 18px rgba(20,40,40,.08);
+  --f-display:"Barlow Condensed","Arial Narrow",system-ui,sans-serif;
+  --f-body:"IBM Plex Sans",system-ui,-apple-system,"Segoe UI",sans-serif;
+  --f-mono:"IBM Plex Mono",ui-monospace,"SFMono-Regular",Menlo,monospace;
+}
+@media (prefers-color-scheme:dark){:root:not([data-theme="light"]){
+  --paper:#141b1c; --grid:#1f2a2b; --card:#1b2526; --ink:#e4ecea; --muted:#9aaba8;
+  --line:#33423f; --table:#5cc39f; --rubber:#ff6a5f; --note:#4a4318; --note-ink:#f6eeb9;
+  --chip:#20332d; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35); color-scheme:dark}}
+:root[data-theme="dark"]{
+  --paper:#141b1c; --grid:#1f2a2b; --card:#1b2526; --ink:#e4ecea; --muted:#9aaba8;
+  --line:#33423f; --table:#5cc39f; --rubber:#ff6a5f; --note:#4a4318; --note-ink:#f6eeb9;
+  --chip:#20332d; --shadow:0 1px 2px rgba(0,0,0,.4),0 6px 18px rgba(0,0,0,.35); color-scheme:dark}
+
+body{background:var(--paper);color:var(--ink);font-family:var(--f-body);font-size:15px;line-height:1.5}
+.wrap{padding-left:max(16px,env(safe-area-inset-left,0px));padding-right:max(16px,env(safe-area-inset-right,0px));padding-block:20px 24px;display:flex;flex-direction:column;gap:14px}
+header{display:flex;flex-wrap:wrap;align-items:baseline;gap:6px 18px}
+h1{font-family:var(--f-display);font-weight:700;font-size:34px;letter-spacing:.01em;margin:0;text-wrap:balance}
+h1 span{color:var(--rubber)}
+.lead{margin:0;color:var(--muted);max-width:68ch}
+.toolbar{display:flex;flex-wrap:wrap;gap:8px;align-items:center}
+.group{display:flex;gap:4px;padding:4px;border:1px solid var(--line);border-radius:10px;background:var(--card)}
+button{font:500 13px var(--f-body);color:var(--ink);background:transparent;border:0;border-radius:7px;padding:7px 11px;cursor:pointer;display:inline-flex;align-items:center;gap:6px}
+button:hover{background:var(--chip)}
+button:focus-visible{outline:2px solid var(--table);outline-offset:1px}
+button[aria-pressed="true"]{background:var(--ink);color:var(--paper)}
+.swatch{width:14px;height:14px;border-radius:50%;border:2px solid var(--card);box-shadow:0 0 0 1px var(--line)}
+button.danger{color:var(--rubber)}
+.hint{font-size:13px;color:var(--muted)}
+
+.viewport{position:relative;overflow:auto;height:max(480px,72vh);border:1px solid var(--line);border-radius:12px;background:var(--paper);touch-action:pan-x pan-y}
+.board{position:relative;width:1420px;height:1420px;transform-origin:0 0;
+  background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
+svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
+canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:none;z-index:5}
+.drawing canvas.ink{pointer-events:auto;cursor:crosshair}
+
+.item{position:absolute;z-index:2;user-select:none;touch-action:none}
+.moving .item{cursor:grab}
+.item.dragging{cursor:grabbing;z-index:4}
+.card{background:var(--card);border:1px solid var(--line);border-radius:10px;box-shadow:var(--shadow);min-width:250px}
+.card h2{font-family:var(--f-display);font-weight:700;font-size:21px;letter-spacing:.02em;margin:0;padding:8px 14px;border-bottom:1px solid var(--line);display:flex;justify-content:space-between;align-items:baseline;gap:12px}
+.card h2 small{font:500 11px var(--f-mono);color:var(--muted);letter-spacing:0}
+.entity h2{color:var(--table)}
+.fields{list-style:none;margin:0;padding:6px 0}
+.fields li{display:grid;grid-template-columns:auto 1fr;gap:10px;align-items:baseline;padding:4px 14px;font-family:var(--f-mono);font-size:13px}
+.fields li em{font-style:normal;color:var(--muted);font-size:11.5px;font-family:var(--f-body);grid-column:2}
+.key{font:600 10px var(--f-body);letter-spacing:.06em;text-transform:uppercase;padding:2px 6px;border-radius:5px;background:var(--chip);color:var(--table);min-width:26px;text-align:center}
+.key.fk{background:transparent;border:1px solid var(--rubber);color:var(--rubber)}
+.key.no{background:transparent;color:transparent}
+.name{display:flex;flex-direction:column}
+
+.datacard table{border-collapse:collapse;font:12.5px var(--f-mono);font-variant-numeric:tabular-nums;width:100%}
+.datacard .tbl{padding:4px 14px 10px}
+.datacard caption{font:600 11px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--muted);text-align:left;padding:6px 0 4px}
+.datacard th{font-weight:500;color:var(--muted);text-align:left;padding:2px 8px 2px 0;border-bottom:1px solid var(--line)}
+.datacard td{padding:2px 8px 2px 0}
+.fixed{background:color-mix(in srgb,var(--table) 16%,transparent);border-radius:4px;padding:0 4px;color:var(--ink)}
+
+.page{max-width:340px}
+.page h2{color:var(--ink)}
+.score{padding:12px 14px 14px;display:flex;flex-direction:column;gap:6px}
+.vs{font-family:var(--f-display);font-size:22px;font-weight:600;line-height:1.1}
+.vs b{color:var(--table);font-weight:700}
+.meta{font-size:12.5px;color:var(--muted)}
+.sets{display:grid;grid-template-columns:auto auto 1fr;gap:2px 10px;font:500 15px var(--f-mono);font-variant-numeric:tabular-nums;margin-top:4px}
+.sets span:nth-child(3n){font:11.5px var(--f-body);color:var(--muted);align-self:center}
+.src{font:11.5px var(--f-mono);color:var(--rubber)}
+
+.endpoint .body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px}
+.endpoint code{font:500 13.5px var(--f-mono);background:var(--chip);padding:4px 8px;border-radius:6px;color:var(--ink)}
+.endpoint p{margin:0;font-size:13px;color:var(--muted);max-width:34ch}
+.verb{color:var(--table);font-weight:600}
+
+.note{background:var(--note);color:var(--note-ink);border-radius:4px 4px 14px 4px;box-shadow:var(--shadow);width:290px;padding:10px 14px 12px;font-size:13.5px}
+.note .grip{font:600 11px var(--f-body);letter-spacing:.07em;text-transform:uppercase;opacity:.75;padding-bottom:6px;display:flex;justify-content:space-between;gap:8px;cursor:grab}
+.note ul,.note ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:4px}
+.note .text{outline:none;min-height:40px;white-space:pre-wrap;user-select:text}
+.note .x{background:transparent;color:inherit;padding:0 4px;font-size:15px;line-height:1;opacity:.7}
+.note.question{background:var(--card);color:var(--ink);border:2px solid var(--rubber)}
+.note.question .grip{color:var(--rubber);opacity:1}
+.note.question strong{display:block;font-family:var(--f-display);font-size:19px;line-height:1.2;margin:2px 0 6px}
+.done{color:var(--table)}
+.todo{color:var(--muted)}
+
+.edge-label{font:500 11px var(--f-mono);fill:var(--muted)}
+.edge-card{font:600 11px var(--f-body);fill:var(--rubber)}
+.sec{position:absolute;z-index:1;display:flex;align-items:center;gap:8px;font:700 18px var(--f-display);letter-spacing:.03em;text-transform:uppercase;color:var(--muted);pointer-events:none}
+.sec b{display:inline-grid;place-items:center;width:24px;height:24px;border-radius:50%;background:var(--ink);color:var(--paper);font-size:14px}
+.api .body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px;max-width:330px}
+.api p{margin:0;font-size:13px}
+.api .files{list-style:none;margin:0;padding:0;display:flex;flex-direction:column;gap:4px}
+.api .files li{display:flex;flex-direction:column}
+.api code{font:500 13px var(--f-mono)}
+.api em{font-style:normal;font-size:11.5px;color:var(--muted)}
+.api .open{color:var(--rubber);font-size:12.5px}
+.back{flex-basis:100%;font-size:13px;color:var(--muted);text-decoration:none}
+.back:hover{color:var(--ink)}
+.status{font:500 12.5px var(--f-body);padding:6px 11px;border-radius:999px;border:1px solid var(--line);background:var(--card);color:var(--muted);display:inline-flex;align-items:center;gap:7px}
+.status::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--muted)}
+.status[data-kind="online"]::before{background:var(--table)}
+.status[data-kind="read"]::before{background:var(--rubber)}
+.readonly .edit-only{display:none}
+.readonly .note .x{display:none}
+#confirm[hidden]{display:none!important}
+@media (prefers-reduced-motion:reduce){*{transition:none!important}}
+</style>
+</head>
+<body>
+
+
+<div class="wrap">
+  <header>
+    <a class="back" href="../#materiali">← Percorso Java BE</a>
+    <h1>Orion TT · <span>schema</span> del ragionamento</h1>
+    <p class="lead" id="lead">Lo schizzo del tutor, nello stesso ordine, con quello che abbiamo deciso finora. Trascina le schede, disegna con la penna e aggiungi note.</p>
+  </header>
+
+  <div class="toolbar" role="toolbar" aria-label="Strumenti lavagna">
+    <span class="status" id="status" data-kind="local">Salvataggio in corso di collegamento…</span>
+    <div class="group edit-only">
+      <button id="mode-move" aria-pressed="true" title="Trascina le schede">✋ Sposta</button>
+      <button id="mode-pen" aria-pressed="false" title="Disegna a mano libera">✎ Penna</button>
+      <button id="mode-erase" aria-pressed="false" title="Cancella un tratto toccandolo">⌫ Gomma</button>
+    </div>
+    <div class="group edit-only" aria-label="Colore penna">
+      <button class="color" data-color="ink" aria-pressed="true" title="Inchiostro"><span class="swatch" style="background:var(--ink)"></span></button>
+      <button class="color" data-color="rubber" aria-pressed="false" title="Rosso"><span class="swatch" style="background:var(--rubber)"></span></button>
+      <button class="color" data-color="table" aria-pressed="false" title="Verde"><span class="swatch" style="background:var(--table)"></span></button>
+      <button class="color" data-color="hi" aria-pressed="false" title="Evidenziatore"><span class="swatch" style="background:#f2c94c"></span></button>
+    </div>
+    <div class="group edit-only">
+      <button id="undo" title="Annulla l'ultimo tratto">↶ Annulla tratto</button>
+      <button id="add-note" title="Aggiungi una nota">＋ Nota</button>
+    </div>
+    <div class="group">
+      <button id="zoom-out" title="Rimpicciolisci">−</button>
+      <button id="zoom-reset" title="Zoom 100%"><span id="zoom-val">100%</span></button>
+      <button id="zoom-in" title="Ingrandisci">+</button>
+    </div>
+    <div class="group edit-only">
+      <button id="reset" class="danger">Ripristina lavagna</button>
+      <span id="confirm" hidden><button id="reset-yes" class="danger">Sì, cancella disegni e note</button><button id="reset-no">No</button></span>
+    </div>
+  </div>
+
+  <div class="viewport moving" id="viewport">
+    <div class="board" id="board">
+      <svg class="edges" id="edges" aria-hidden="true">
+        <defs>
+          <marker id="arrow" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--rubber)"></path>
+          </marker>
+          <marker id="arrow-muted" viewBox="0 0 10 10" refX="9" refY="5" markerWidth="8" markerHeight="8" orient="auto-start-reverse">
+            <path d="M0,0 L10,5 L0,10 z" fill="var(--muted)"></path>
+          </marker>
+        </defs>
+        <g id="edge-layer"></g>
+      </svg>
+
+      <!-- Etichette delle sezioni: stesso ordine dello schizzo del tutor -->
+      <div class="sec" style="left:40px;top:20px"><b>1</b>Entità</div>
+      <div class="sec" style="left:40px;top:490px"><b>2</b>Dati di esempio</div>
+      <div class="sec" style="left:430px;top:490px"><b>3</b>La partita in chiaro</div>
+      <div class="sec" style="left:40px;top:980px"><b>4</b>Controller e API</div>
+      <div class="sec" style="left:430px;top:980px"><b>5</b>Pagina web risultato</div>
+      <div class="sec" style="left:800px;top:980px"><b>6</b>Che endpoint creare?</div>
+      <div class="sec" style="left:1080px;top:20px">Appunti</div>
+
+      <!-- 1 · ENTITÀ -->
+      <section class="item card entity" id="c-player" data-x="40" data-y="60">
+        <h2>Player <small>tabella player</small></h2>
+        <ul class="fields">
+          <li><span class="key">PK</span><span>id</span></li>
+          <li><span class="key no">·</span><span>firstName</span></li>
+          <li><span class="key no">·</span><span>lastName</span></li>
+        </ul>
+      </section>
+
+      <section class="item card entity" id="c-match" data-x="420" data-y="60">
+        <h2>Match <small>tabella match</small></h2>
+        <ul class="fields">
+          <li><span class="key">PK</span><span>id</span></li>
+          <li id="f-p1"><span class="key fk">FK</span><span class="name">player1<em>→ Player · @ManyToOne</em></span></li>
+          <li id="f-p2"><span class="key fk">FK</span><span class="name">player2<em>→ Player · @ManyToOne</em></span></li>
+          <li id="f-win"><span class="key fk">FK</span><span class="name">winner<em>→ Player · null finché non finisce</em></span></li>
+          <li><span class="key no">·</span><span class="name">status<em>scheduled · in_progress · finished</em></span></li>
+          <li><span class="key no">·</span><span class="name">createdAt<em>dato tecnico: quando nasce la riga</em></span></li>
+          <li><span class="key no">·</span><span class="name">plannedDate<em>quando si gioca (la vede l'utente)</em></span></li>
+        </ul>
+      </section>
+
+      <section class="item card entity" id="c-set" data-x="790" data-y="60">
+        <h2>MatchSet <small>tabella match_set</small></h2>
+        <ul class="fields">
+          <li><span class="key">PK</span><span>id</span></li>
+          <li id="f-match"><span class="key fk">FK</span><span class="name">match<em>→ Match · @ManyToOne</em></span></li>
+          <li><span class="key no">·</span><span class="name">setNumber<em>ordine del set nella partita</em></span></li>
+          <li><span class="key no">·</span><span>player1Points</span></li>
+          <li><span class="key no">·</span><span>player2Points</span></li>
+        </ul>
+      </section>
+
+      <!-- 2 · DATI DI ESEMPIO -->
+      <section class="item card datacard" id="c-data" data-x="40" data-y="530">
+        <h2>Tabelle <small>corrette</small></h2>
+        <div class="tbl">
+          <table><caption>player</caption>
+            <tr><th>id</th><th>first_name</th><th>last_name</th></tr>
+            <tr><td>1</td><td>Luca</td><td>Rosano</td></tr>
+            <tr><td>2</td><td>Alessandro</td><td>Le Mura</td></tr>
+          </table>
+          <table><caption>match</caption>
+            <tr><th>id</th><th>p1</th><th>p2</th><th>status</th><th>winner</th><th>planned</th></tr>
+            <tr><td>1</td><td>1</td><td>2</td><td><span class="fixed">finished</span></td><td><span class="fixed">1</span></td><td>31/10</td></tr>
+          </table>
+          <table><caption>match_set</caption>
+            <tr><th>id</th><th>match</th><th>set_n</th><th>p1</th><th>p2</th></tr>
+            <tr><td>1</td><td>1</td><td>1</td><td>11</td><td>2</td></tr>
+            <tr><td>2</td><td>1</td><td>2</td><td>7</td><td>11</td></tr>
+            <tr><td>3</td><td>1</td><td>3</td><td>13</td><td>11</td></tr>
+            <tr><td>4</td><td>1</td><td>4</td><td>11</td><td>5</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <!-- 3 · LA PARTITA IN CHIARO -->
+      <section class="item card page" id="c-plain" data-x="430" data-y="530">
+        <h2>Luca vs Alessandro</h2>
+        <div class="score">
+          <div class="meta">status: <b>finished</b> · vince Luca 3 set a 1</div>
+          <div class="sets">
+            <span>11 – 2</span><span></span><span>set 1</span>
+            <span>7 – 11</span><span></span><span>set 2</span>
+            <span>13 – 11</span><span></span><span>set 3</span>
+            <span>11 – 5</span><span></span><span>set 4</span>
+          </div>
+          <div class="src">al meglio dei 5: chi vince 3 set ha vinto</div>
+        </div>
+      </section>
+
+      <!-- 4 · CONTROLLER E API -->
+      <section class="item card api" id="c-api" data-x="40" data-y="1020">
+        <h2>Controller e API <small>dallo schizzo</small></h2>
+        <div class="body">
+          <p><span class="verb">GET</span> → serve sapere player, match (match_id) e set (player_points)</p>
+          <ul class="files">
+            <li><code>Player.java</code><em>@Entity · id, firstName, lastName</em></li>
+            <li><code>Match.java</code><em>@Entity</em></li>
+            <li><code>MatchSet.java</code><em>@Entity</em></li>
+            <li><code>PlayerController.java</code></li>
+            <li><code>MatchController.java</code></li>
+          </ul>
+          <p class="open">Da decidere: in quale Controller va l'endpoint del risultato → 6</p>
+        </div>
+      </section>
+
+      <!-- 5 · PAGINA WEB RISULTATO -->
+      <section class="item card page" id="c-page" data-x="430" data-y="1020">
+        <h2>Pagina risultato <small>cosa vede l'utente</small></h2>
+        <div class="score">
+          <div class="vs"><b>Luca Rosano</b> vs Alessandro Le Mura</div>
+          <div class="src">↳ player.first_name + last_name</div>
+          <div class="meta">Giocata il 31/10/2026 · Vincitore: Luca Rosano</div>
+          <div class="src">↳ match.planned_date · match.winner_id → player</div>
+          <div class="sets">
+            <span>11 – 2</span><span></span><span>set 1</span>
+            <span>7 – 11</span><span></span><span>set 2</span>
+            <span>13 – 11</span><span></span><span>set 3</span>
+            <span>11 – 5</span><span></span><span>set 4</span>
+          </div>
+          <div class="src">↳ match_set.player1_points – player2_points, in ordine di set_number</div>
+        </div>
+      </section>
+
+      <!-- 6 · CHE ENDPOINT CREARE -->
+      <section class="item card endpoint" id="c-endpoint" data-x="800" data-y="1020">
+        <h2>Endpoint scelto <small>una chiamata</small></h2>
+        <div class="body">
+          <code><span class="verb">GET</span> /api/matches/{id}/result</code>
+          <p>Una sola chiamata invece di quattro. Restituisce un <b>DTO</b> (MatchResultDto) con solo i dati della pagina: nomi, data, vincitore, set.</p>
+        </div>
+      </section>
+
+      <aside class="item note question" id="n-question" data-x="800" data-y="1220">
+        <div class="grip"><span>Domanda aperta · siamo qui</span></div>
+        <strong>In quale Controller metti GET /api/matches/{id}/result?</strong>
+        PlayerController, MatchController o uno nuovo? Perché?
+      </aside>
+
+      <!-- APPUNTI -->
+      <aside class="item note" id="n-rules" data-x="1080" data-y="60">
+        <div class="grip"><span>Regole imparate</span></div>
+        <ul>
+          <li>I dati di esempio devono raccontare una storia coerente</li>
+          <li>Nomi in inglese: camelCase in Java, snake_case nel DB</li>
+          <li>Evita nomi già usati da Java: Set → MatchSet</li>
+          <li>PK identifica la riga, FK punta a un'altra tabella</li>
+          <li>All'utente si mostrano date reali, non quelle tecniche</li>
+        </ul>
+      </aside>
+
+      <aside class="item note" id="n-steps" data-x="1080" data-y="330">
+        <div class="grip"><span>Il metodo</span></div>
+        <ol>
+          <li class="done">Dati di esempio coerenti ✓</li>
+          <li class="done">Entità e campi ✓</li>
+          <li class="done">Relazioni ✓</li>
+          <li class="done">Output della pagina ✓</li>
+          <li>Endpoint ← siamo qui</li>
+          <li class="todo">Strati: Controller · Service · Repository</li>
+        </ol>
+      </aside>
+
+      <canvas class="ink" id="ink"></canvas>
+    </div>
+  </div>
+  <p class="hint" id="hint">Su telefono: usa lo zoom per vedere tutta la lavagna, poi scegli Penna per disegnare. In modalità Sposta trascini schede e note.</p>
+</div>
+
+<script>
+(function(){
+  const LOCAL_KEY='orion-lavagna-v1';
+  const board=document.getElementById('board');
+  const viewport=document.getElementById('viewport');
+  const layer=document.getElementById('edge-layer');
+  const canvas=document.getElementById('ink');
+  const statusEl=document.getElementById('status');
+  const W=1420,H=1420;
+  // stato mostrato: posizioni, tratti {id,c,pts,t}, note {id,x,y,text,t}
+  let state={pos:{},strokes:[],notes:[]};
+  let mode='move', color='ink', zoom=1;
+  let store='local';   // 'local' | 'online' | 'read'
+  let db=null;
+
+  // ---------- salvataggio ----------
+  function loadLocal(){try{const s=JSON.parse(localStorage.getItem(LOCAL_KEY)||'null');if(s&&typeof s==='object'){state.pos=s.pos||{};state.strokes=(s.strokes||[]).map((x,i)=>Object.assign({id:'l'+i,t:i},x));state.notes=s.notes||[];}}catch(e){}}
+  function saveLocal(){if(store!=='local')return;try{localStorage.setItem(LOCAL_KEY,JSON.stringify(state));}catch(e){}}
+  function setStatus(kind,text){statusEl.dataset.kind=kind;statusEl.textContent=text;}
+  const tidy=pts=>pts.map(p=>[Math.round(p[0]),Math.round(p[1])]);
+
+  const remote={
+    layout(){if(store==='online')db.doc('lavagna/layout').set({pos:state.pos}).catch(fail);},
+    addStroke(s){if(store==='online')db.collection('strokes').doc(s.id).set({c:s.c,pts:tidy(s.pts),t:s.t}).catch(fail);},
+    delStroke(id){if(store==='online')db.collection('strokes').doc(id).delete().catch(fail);},
+    setNote(n){if(store==='online')db.collection('notes').doc(n.id).set({x:n.x,y:n.y,text:n.text||'',t:n.t||Date.now()}).catch(fail);},
+    delNote(id){if(store==='online')db.collection('notes').doc(id).delete().catch(fail);}
+  };
+  function fail(e){
+    if(e&&e.code==='invalid_argument'){goReadOnly();return;}
+    if(e&&e.code==='quota_exceeded'){setStatus('read','Spazio pieno: cancella qualche tratto');return;}
+    setStatus('read','Modifica non salvata, riprova');
+  }
+  function persist(){saveLocal();}
+
+  // ---------- colori ----------
+  function cssVar(n){return getComputedStyle(document.documentElement).getPropertyValue(n).trim()||'#333';}
+  function strokeColor(c){return c==='hi'?'rgba(242,201,76,.45)':cssVar(c==='rubber'?'--rubber':c==='table'?'--table':'--ink');}
+
+  // ---------- posizioni ----------
+  function place(el){
+    const p=state.pos[el.id];
+    const x=p?p[0]:+el.dataset.x, y=p?p[1]:+el.dataset.y;
+    el.style.left=x+'px'; el.style.top=y+'px';
+  }
+  function itemXY(el){return [parseFloat(el.style.left)||0,parseFloat(el.style.top)||0];}
+
+  // ---------- linee delle relazioni ----------
+  const EDGES=[
+    {from:'f-p1',to:'c-player',label:'player1_id'},
+    {from:'f-p2',to:'c-player',label:'player2_id'},
+    {from:'f-win',to:'c-player',label:'winner_id'},
+    {from:'f-match',to:'c-match',label:'match_id'},
+    {from:'c-endpoint',to:'c-page',label:'1 chiamata → DTO',muted:true}
+  ];
+  function rectOf(el){
+    const card=el.closest('.item');const [cx,cy]=itemXY(card);
+    if(el===card)return {x:cx,y:cy,w:card.offsetWidth,h:card.offsetHeight};
+    return {x:cx,y:cy+el.offsetTop,w:card.offsetWidth,h:el.offsetHeight};
+  }
+  function drawEdges(){
+    layer.innerHTML='';
+    const ns='http://www.w3.org/2000/svg';
+    EDGES.forEach(e=>{
+      const a=document.getElementById(e.from),b=document.getElementById(e.to);if(!a||!b)return;
+      const ra=rectOf(a),rb=rectOf(b);
+      const toLeft=rb.x+rb.w/2<ra.x+ra.w/2;
+      const x1=toLeft?ra.x:ra.x+ra.w, y1=ra.y+ra.h/2;
+      const x2=toLeft?rb.x+rb.w:rb.x, y2=rb.y+Math.min(rb.h/2,40);
+      const dx=Math.max(40,Math.abs(x2-x1)/2)*(toLeft?-1:1);
+      const path=document.createElementNS(ns,'path');
+      path.setAttribute('d',`M${x1},${y1} C${x1+dx},${y1} ${x2-dx},${y2} ${x2},${y2}`);
+      path.setAttribute('fill','none');
+      path.setAttribute('stroke',e.muted?'var(--muted)':'var(--rubber)');
+      path.setAttribute('stroke-width','1.6');
+      if(e.muted)path.setAttribute('stroke-dasharray','5 5');
+      path.setAttribute('marker-end',e.muted?'url(#arrow-muted)':'url(#arrow)');
+      layer.appendChild(path);
+      if(!e.muted){
+        const n=document.createElementNS(ns,'text');n.setAttribute('class','edge-card');
+        n.setAttribute('x',x1+(toLeft?-14:6));n.setAttribute('y',y1-6);n.textContent='N';layer.appendChild(n);
+        const one=document.createElementNS(ns,'text');one.setAttribute('class','edge-card');
+        one.setAttribute('x',x2+(toLeft?6:-14));one.setAttribute('y',y2-6);one.textContent='1';layer.appendChild(one);
+      }
+      const t=document.createElementNS(ns,'text');t.setAttribute('class','edge-label');
+      t.setAttribute('x',(x1+x2)/2);t.setAttribute('y',(y1+y2)/2-6);t.setAttribute('text-anchor','middle');
+      t.textContent=e.label;layer.appendChild(t);
+    });
+  }
+
+  // ---------- note dell'utente ----------
+  const noteTimers={};
+  function makeNote(n){
+    let el=document.getElementById(n.id);
+    if(el){ // già presente: aggiorna senza disturbare chi sta scrivendo
+      const txt=el.querySelector('.text');
+      if(document.activeElement!==txt&&txt.textContent!==(n.text||''))txt.textContent=n.text||'';
+      if(!el.classList.contains('dragging')){el.style.left=n.x+'px';el.style.top=n.y+'px';}
+      txt.contentEditable=store==='read'?'false':'true';
+      return el;
+    }
+    el=document.createElement('aside');
+    el.className='item note';el.dataset.user='1';el.id=n.id;el.dataset.x=n.x;el.dataset.y=n.y;
+    el.innerHTML='<div class="grip"><span>Nota</span><button class="x" title="Elimina nota" aria-label="Elimina nota">×</button></div><div class="text" spellcheck="true"></div>';
+    const txt=el.querySelector('.text');
+    txt.textContent=n.text||'';txt.contentEditable=store==='read'?'false':'true';
+    txt.addEventListener('input',()=>{
+      const s=state.notes.find(q=>q.id===n.id);if(!s)return;
+      s.text=txt.innerText;persist();
+      clearTimeout(noteTimers[n.id]);noteTimers[n.id]=setTimeout(()=>remote.setNote(s),700);
+    });
+    el.querySelector('.x').addEventListener('click',()=>{
+      state.notes=state.notes.filter(q=>q.id!==n.id);el.remove();persist();remote.delNote(n.id);
+    });
+    board.insertBefore(el,canvas);el.style.left=n.x+'px';el.style.top=n.y+'px';bindDrag(el);
+    return el;
+  }
+  function syncNotes(){
+    const ids=new Set(state.notes.map(n=>n.id));
+    document.querySelectorAll('.note[data-user]').forEach(el=>{if(!ids.has(el.id))el.remove();});
+    state.notes.forEach(makeNote);
+  }
+
+  // ---------- trascinamento ----------
+  function bindDrag(el){
+    el.addEventListener('pointerdown',ev=>{
+      if(mode!=='move'||store==='read')return;
+      if(ev.target.closest('.text,button'))return;
+      ev.preventDefault();
+      const start=[ev.clientX,ev.clientY],orig=itemXY(el);
+      el.classList.add('dragging');el.setPointerCapture(ev.pointerId);
+      function mv(e){
+        const x=Math.max(0,Math.min(W-60,orig[0]+(e.clientX-start[0])/zoom));
+        const y=Math.max(0,Math.min(H-40,orig[1]+(e.clientY-start[1])/zoom));
+        el.style.left=x+'px';el.style.top=y+'px';drawEdges();
+      }
+      function up(){
+        el.classList.remove('dragging');el.removeEventListener('pointermove',mv);el.removeEventListener('pointerup',up);el.removeEventListener('pointercancel',up);
+        const p=itemXY(el).map(Math.round);
+        const nn=state.notes.find(q=>q.id===el.id);
+        if(nn){nn.x=p[0];nn.y=p[1];persist();remote.setNote(nn);}
+        else{state.pos[el.id]=p;persist();remote.layout();}
+      }
+      el.addEventListener('pointermove',mv);el.addEventListener('pointerup',up);el.addEventListener('pointercancel',up);
+    });
+  }
+
+  // ---------- disegno ----------
+  const ctx=canvas.getContext('2d');
+  let live=null; // tratto in corso
+  function sizeCanvas(){const r=window.devicePixelRatio||1;canvas.width=W*r;canvas.height=H*r;ctx.setTransform(r,0,0,r,0,0);redraw();}
+  function drawStroke(s){
+    if(!s.pts||s.pts.length<1)return;
+    ctx.strokeStyle=strokeColor(s.c);ctx.lineWidth=s.c==='hi'?14:2.4;ctx.lineCap='round';ctx.lineJoin='round';
+    ctx.beginPath();ctx.moveTo(s.pts[0][0],s.pts[0][1]);
+    if(s.pts.length===1)ctx.lineTo(s.pts[0][0]+.1,s.pts[0][1]);
+    for(let i=1;i<s.pts.length;i++)ctx.lineTo(s.pts[i][0],s.pts[i][1]);
+    ctx.stroke();
+  }
+  function redraw(){
+    ctx.clearRect(0,0,W,H);
+    [...state.strokes].sort((a,b)=>a.t-b.t).forEach(drawStroke);
+    if(live)drawStroke(live);
+  }
+  function boardPt(e){const r=canvas.getBoundingClientRect();return [(e.clientX-r.left)/zoom,(e.clientY-r.top)/zoom];}
+  function eraseAt(p){
+    const hit=state.strokes.filter(s=>s.pts.some(q=>Math.hypot(q[0]-p[0],q[1]-p[1])<12));
+    if(!hit.length)return;
+    const ids=new Set(hit.map(s=>s.id));
+    state.strokes=state.strokes.filter(s=>!ids.has(s.id));
+    redraw();persist();hit.forEach(s=>remote.delStroke(s.id));
+  }
+  canvas.addEventListener('pointerdown',ev=>{
+    if(mode==='move'||store==='read')return;
+    ev.preventDefault();canvas.setPointerCapture(ev.pointerId);
+    if(mode==='erase'){eraseAt(boardPt(ev));
+      const mv=e=>eraseAt(boardPt(e));const up=()=>{canvas.removeEventListener('pointermove',mv);canvas.removeEventListener('pointerup',up);};
+      canvas.addEventListener('pointermove',mv);canvas.addEventListener('pointerup',up);return;}
+    live={id:'s'+Date.now().toString(36)+Math.random().toString(36).slice(2,6),c:color,pts:[boardPt(ev)],t:Date.now()};redraw();
+    const mv=e=>{const p=boardPt(e),q=live.pts[live.pts.length-1];if(Math.hypot(p[0]-q[0],p[1]-q[1])>=2){live.pts.push(p);redraw();}};
+    const up=()=>{
+      canvas.removeEventListener('pointermove',mv);canvas.removeEventListener('pointerup',up);canvas.removeEventListener('pointercancel',up);
+      const s=Object.assign({},live,{pts:tidy(live.pts)});live=null;
+      state.strokes.push(s);redraw();persist();remote.addStroke(s);
+    };
+    canvas.addEventListener('pointermove',mv);canvas.addEventListener('pointerup',up);canvas.addEventListener('pointercancel',up);
+  });
+
+  // ---------- strumenti ----------
+  function setMode(m){
+    mode=m;
+    [['move','mode-move'],['pen','mode-pen'],['erase','mode-erase']].forEach(([k,id])=>document.getElementById(id).setAttribute('aria-pressed',String(k===m)));
+    viewport.classList.toggle('drawing',m!=='move');viewport.classList.toggle('moving',m==='move');
+    viewport.style.touchAction=m==='move'?'pan-x pan-y':'none';
+  }
+  document.getElementById('mode-move').onclick=()=>setMode('move');
+  document.getElementById('mode-pen').onclick=()=>setMode('pen');
+  document.getElementById('mode-erase').onclick=()=>setMode('erase');
+  document.querySelectorAll('.color').forEach(b=>b.addEventListener('click',()=>{
+    color=b.dataset.color;document.querySelectorAll('.color').forEach(x=>x.setAttribute('aria-pressed',String(x===b)));setMode('pen');
+  }));
+  document.getElementById('undo').onclick=()=>{
+    if(!state.strokes.length)return;
+    const last=state.strokes.reduce((a,b)=>b.t>a.t?b:a);
+    state.strokes=state.strokes.filter(s=>s!==last);redraw();persist();remote.delStroke(last.id);
+  };
+  document.getElementById('add-note').onclick=()=>{
+    const n={id:'n-u'+Date.now().toString(36),x:Math.round((viewport.scrollLeft+40)/zoom),y:Math.round((viewport.scrollTop+40)/zoom),text:'',t:Date.now()};
+    state.notes.push(n);persist();remote.setNote(n);
+    const el=makeNote(n);setMode('move');el.querySelector('.text').focus();
+  };
+  function setZoom(z){zoom=Math.max(.4,Math.min(1.6,Math.round(z*10)/10));board.style.transform=`scale(${zoom})`;
+    board.style.marginRight=(W*zoom-W)+'px';board.style.marginBottom=(H*zoom-H)+'px';
+    document.getElementById('zoom-val').textContent=Math.round(zoom*100)+'%';}
+  document.getElementById('zoom-in').onclick=()=>setZoom(zoom+.1);
+  document.getElementById('zoom-out').onclick=()=>setZoom(zoom-.1);
+  document.getElementById('zoom-reset').onclick=()=>setZoom(1);
+  const confirmBox=document.getElementById('confirm');
+  document.getElementById('reset').onclick=()=>{confirmBox.hidden=false;};
+  document.getElementById('reset-no').onclick=()=>{confirmBox.hidden=true;};
+  document.getElementById('reset-yes').onclick=()=>{
+    const oldStrokes=state.strokes.map(s=>s.id),oldNotes=state.notes.map(n=>n.id);
+    state={pos:{},strokes:[],notes:[]};persist();
+    if(store==='online'){remote.layout();oldStrokes.forEach(remote.delStroke);oldNotes.forEach(remote.delNote);}
+    syncNotes();document.querySelectorAll('.item').forEach(place);redraw();drawEdges();confirmBox.hidden=true;
+  };
+
+  function renderAll(){
+    document.querySelectorAll('.item:not([data-user])').forEach(el=>{if(!el.classList.contains('dragging'))place(el);});
+    syncNotes();redraw();drawEdges();
+  }
+  function goReadOnly(){
+    store='read';document.body.classList.add('readonly');setMode('move');
+    viewport.classList.remove('moving');
+    document.querySelectorAll('.note .text').forEach(t=>t.contentEditable='false');
+    setStatus('read','Sola lettura: vedi lo schema e i disegni di Luca');
+    document.getElementById('lead').textContent='Lo schema di progettazione di Orion TT fino al passo 5, con gli appunti di Luca. Si aggiorna da solo quando Luca disegna.';
+    document.getElementById('hint').textContent='Su telefono usa lo zoom per vedere tutta la lavagna.';
+  }
+
+  // ---------- avvio ----------
+  loadLocal();
+  document.querySelectorAll('.item').forEach(el=>{place(el);bindDrag(el);});
+  syncNotes();
+  sizeCanvas();
+  if(window.innerWidth<700)setZoom(.6);
+  requestAnimationFrame(drawEdges);
+  if(document.fonts&&document.fonts.ready)document.fonts.ready.then(drawEdges);
+  setStatus('local','Salvato solo in questo browser');
+  const mq=window.matchMedia('(prefers-color-scheme: dark)');
+  if(mq.addEventListener)mq.addEventListener('change',redraw);
+  new MutationObserver(redraw).observe(document.documentElement,{attributes:true,attributeFilter:['data-theme']});
+
+  // salvataggio online, se disponibile
+  (async function connect(){
+    if(!window.claude||!window.claude.use)return;
+    let user=null;
+    try{[db,user]=await Promise.all([window.claude.use('db'),window.claude.use('user')]);}catch(e){return;}
+    if(!db)return;
+    let canWrite=null;
+    try{canWrite=user?await user.can('data.write'):null;}catch(e){}
+    const local={pos:state.pos,strokes:state.strokes,notes:state.notes};
+    if(canWrite===false){goReadOnly();}
+    else{store='online';setStatus('online','Salvato online · il tutor vede le modifiche');}
+
+    let first={layout:true,strokes:true,notes:true}, remoteEmpty={layout:false,strokes:false,notes:false};
+    function maybeMigrate(){
+      // la prima volta online, porta su i disegni fatti prima in questo browser
+      if(store!=='online'||first.layout||first.strokes||first.notes)return;
+      if(!(remoteEmpty.layout&&remoteEmpty.strokes&&remoteEmpty.notes))return;
+      let done=false;try{done=localStorage.getItem(LOCAL_KEY+'-migrato')==='1';}catch(e){}
+      if(done)return;
+      const has=Object.keys(local.pos).length||local.strokes.length||local.notes.length;
+      if(!has)return;
+      state.pos=local.pos;state.strokes=local.strokes.map(s=>Object.assign({},s,{id:'s'+s.t+'m'+Math.random().toString(36).slice(2,6)}));state.notes=local.notes.map(n=>Object.assign({t:Date.now()},n));
+      (async()=>{
+        try{
+          await db.doc('lavagna/layout').set({pos:state.pos});
+          for(const s of state.strokes)await db.collection('strokes').doc(s.id).set({c:s.c,pts:tidy(s.pts),t:s.t});
+          for(const n of state.notes)await db.collection('notes').doc(n.id).set({x:n.x,y:n.y,text:n.text||'',t:n.t});
+          try{localStorage.setItem(LOCAL_KEY+'-migrato','1');}catch(e){}
+        }catch(e){fail(e);}
+      })();
+      renderAll();
+    }
+    state={pos:{},strokes:[],notes:[]};
+    db.doc('lavagna/layout').onSnapshot(snap=>{
+      remoteEmpty.layout=!snap.exists;state.pos=(snap.exists&&snap.data().pos)||{};
+      first.layout=false;renderAll();maybeMigrate();
+    },()=>{});
+    db.collection('strokes').orderBy('t').onSnapshot(snap=>{
+      remoteEmpty.strokes=snap.empty;
+      state.strokes=snap.docs.map(d=>{const v=d.data();return {id:d.id,c:v.c,pts:v.pts||[],t:v.t||0};});
+      first.strokes=false;redraw();maybeMigrate();
+    },()=>{});
+    db.collection('notes').onSnapshot(snap=>{
+      remoteEmpty.notes=snap.empty;
+      state.notes=snap.docs.map(d=>{const v=d.data();return {id:d.id,x:v.x||40,y:v.y||40,text:v.text||'',t:v.t||0};});
+      first.notes=false;syncNotes();maybeMigrate();
+    },()=>{});
+  })();
+})();
+</script>
+
+</body>
+</html>

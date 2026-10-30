@@ -215,7 +215,7 @@ footer{font-size:.78rem;color:var(--muted)}
   <div class="panel" id="materiali" role="tabpanel" aria-labelledby="tab-materiali" hidden>
     <section class="card">
       <h2>Materiali di progettazione</h2>
-      <p class="note">Schemi e lavagne prodotti durante gli esercizi, dal più recente. Si aprono su claude.ai in una nuova scheda.</p>
+      <p class="note">Schemi e lavagne prodotti durante gli esercizi, dal più recente. Si aprono in una nuova scheda, senza bisogno di accedere.</p>
       <div class="chips" role="group" aria-label="Progetto" id="mat-filtri"></div>
       <ul class="mats" id="mat-lista"></ul>
     </section>
@@ -270,8 +270,8 @@ footer{font-size:.78rem;color:var(--muted)}
    data: AAAA-MM-GG (serve per l'ordine: il più recente va in alto) */
 const MATERIALI = [
   { tipo: "Lavagna", titolo: "Lavagna Orion TT", progetto: "Orion TT", data: "2026-10-30",
-    descrizione: "Dati di esempio, entità Player, Match e MatchSet, relazioni @ManyToOne, pagina risultato ed endpoint scelto. Con gli appunti di Luca, in sola lettura.",
-    link: "https://claude.ai/artifact/EEWDQvpPJBrVYKukZnCyfR" },
+    descrizione: "Dati di esempio, entità Player, Match e MatchSet, relazioni @ManyToOne, pagina risultato ed endpoint scelto. Si può disegnare sopra; i disegni restano nel proprio browser.",
+    link: "lavagna-orion/" },
 ];
 
 (function () {
