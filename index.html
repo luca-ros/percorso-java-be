@@ -13,7 +13,7 @@
 /* Layout: una colonna stretta da quaderno di bordo, schede Panoramica / Competenze, barre continue con tacca al 6 */
 :root{
   --bg:#f5f7f8; --panel:#ffffff; --fg:#14232b; --muted:#5b6d76; --line:#dde4e8;
-  --accent:#1d6a8a; --accent-soft:#d6e8f0; --track:#e6ecef; --low:#c2412d; --later:#9aa9b1; --ok:#2f7d4f; --ok-soft:#dcefe3; --mid:#a06a00; --mid-soft:#f6ead2; --low-soft:#f6dfd9;
+  --accent:#1d6a8a; --accent-soft:#d6e8f0; --track:#e6ecef; --low:#c2412d; --later:#9aa9b1; --ok:#2f7d4f; --ok-soft:#dcefe3;
   --display:"Bricolage Grotesque", "Segoe UI", system-ui, sans-serif;
   --body:"IBM Plex Sans", "Segoe UI", system-ui, sans-serif;
   --mono:"IBM Plex Mono", ui-monospace, "SFMono-Regular", Menlo, monospace;
@@ -22,10 +22,10 @@
 }
 @media (prefers-color-scheme: dark){:root:not([data-theme="light"]){
   --bg:#0f171b; --panel:#162228; --fg:#e4edf1; --muted:#93a6af; --line:#26363e;
-  --accent:#5fb3d6; --accent-soft:#183847; --track:#22323a; --low:#ef7a63; --later:#5d717a; --ok:#6cc391; --ok-soft:#1a3426; --mid:#e3b44f; --mid-soft:#3a2f17; --low-soft:#3d221d; --glow1:rgba(95,179,214,.09); --glow2:rgba(108,195,145,.05); --dot:rgba(228,237,241,.045); color-scheme:dark}}
+  --accent:#5fb3d6; --accent-soft:#183847; --track:#22323a; --low:#ef7a63; --later:#5d717a; --ok:#6cc391; --ok-soft:#1a3426; --glow1:rgba(95,179,214,.09); --glow2:rgba(108,195,145,.05); --dot:rgba(228,237,241,.045); color-scheme:dark}}
 :root[data-theme="dark"]{
   --bg:#0f171b; --panel:#162228; --fg:#e4edf1; --muted:#93a6af; --line:#26363e;
-  --accent:#5fb3d6; --accent-soft:#183847; --track:#22323a; --low:#ef7a63; --later:#5d717a; --ok:#6cc391; --ok-soft:#1a3426; --mid:#e3b44f; --mid-soft:#3a2f17; --low-soft:#3d221d; --glow1:rgba(95,179,214,.09); --glow2:rgba(108,195,145,.05); --dot:rgba(228,237,241,.045); color-scheme:dark}
+  --accent:#5fb3d6; --accent-soft:#183847; --track:#22323a; --low:#ef7a63; --later:#5d717a; --ok:#6cc391; --ok-soft:#1a3426; --glow1:rgba(95,179,214,.09); --glow2:rgba(108,195,145,.05); --dot:rgba(228,237,241,.045); color-scheme:dark}
 body{background-color:var(--bg);background-image:radial-gradient(48rem 32rem at 100% -6rem,var(--glow1),transparent 70%),radial-gradient(40rem 30rem at -8rem 38rem,var(--glow2),transparent 70%),radial-gradient(var(--dot) 1px,transparent 1.4px);background-size:auto,auto,22px 22px;background-attachment:fixed;color:var(--fg);font-family:var(--body);font-size:16px;line-height:1.6;letter-spacing:.005em;-webkit-font-smoothing:antialiased}
 .wrap{max-width:60rem;margin:0 auto;padding-block:28px 48px;padding-left:max(16px, env(safe-area-inset-left, 0px));padding-right:max(16px, env(safe-area-inset-right, 0px));display:flex;flex-direction:column;gap:20px}
 .top{display:flex;align-items:flex-start;justify-content:space-between;gap:12px}
@@ -122,26 +122,6 @@ td.nw{white-space:nowrap}
 .btn.solid{background:var(--accent);color:var(--bg)}
 .btn:hover{background:var(--accent-soft);color:var(--accent)}
 .btn:focus-visible{outline:2px solid var(--accent);outline-offset:2px}
-.fj-sum{display:flex;flex-wrap:wrap;gap:6px 16px;font-size:.85rem;color:var(--muted);margin:0 0 6px}
-.fj-sum b{color:var(--fg);font-variant-numeric:tabular-nums}
-.sem{display:inline-flex;align-items:center;gap:6px;font-size:.75rem;padding:2px 9px;border-radius:999px;white-space:nowrap;background:var(--track);color:var(--muted)}
-.sem::before{content:"";width:8px;height:8px;border-radius:50%;background:var(--later)}
-.sem.r{background:var(--low-soft);color:var(--low)}.sem.r::before{background:var(--low)}
-.sem.g{background:var(--mid-soft);color:var(--mid)}.sem.g::before{background:var(--mid)}
-.sem.v{background:var(--ok-soft);color:var(--ok)}.sem.v::before{background:var(--ok)}
-.cc{list-style:none;margin:0;padding:0}
-.cc li{display:grid;grid-template-columns:minmax(0,12rem) minmax(0,1fr) 7.5rem;gap:4px 14px;align-items:center;padding:10px 0;border-bottom:1px solid var(--line)}
-.cc li:last-child{border-bottom:0}
-.cc .nome{font-weight:500}
-.cc .es{font-size:.88rem;color:var(--muted);min-width:0;overflow-wrap:anywhere}
-.cc code,.fj code{font-family:var(--mono);font-size:.82rem;color:var(--fg);background:var(--track);padding:1px 6px;border-radius:5px}
-.cc .st{justify-self:end}
-@media (max-width:34rem){.cc li{grid-template-columns:minmax(0,1fr) auto}.cc .es{grid-column:1 / -1;grid-row:2}}
-.fj h3{margin:22px 0 4px;font-weight:600}
-.fj .vt{display:grid;grid-template-columns:repeat(auto-fit,minmax(min(100%,9rem),1fr));gap:10px;margin-top:8px}
-.fj .vt .tile{padding:12px 14px}
-.fj .vt .v{font-size:1.7rem}
-.fj .vuoto{color:var(--muted);font-size:.9rem;margin:8px 0 0}
 footer{font-size:.78rem;color:var(--muted)}
 [hidden]{display:none!important}
 </style>
@@ -239,27 +219,6 @@ footer{font-size:.78rem;color:var(--muted)}
       <div class="chips" role="group" aria-label="Progetto" id="mat-filtri"></div>
       <ul class="mats" id="mat-lista"></ul>
     </section>
-
-    <section class="card fj" id="fondamenti">
-      <h2>Fondamenti Java</h2>
-      <p class="note">I concetti base del linguaggio, allenati con esercizi brevi (Exercism, CodingBat). Si aggiorna a fine di ogni sessione di esercizi.</p>
-      <p class="note" id="fj-punto"></p>
-
-      <h3>Mappa dei concetti</h3>
-      <div class="legend"><span class="sem r">non chiaro</span><span class="sem g">con aiuto</span><span class="sem v">da solo</span><span class="sem">da valutare</span></div>
-      <p class="fj-sum" id="fj-sum"></p>
-      <ul class="cc" id="fj-concetti"></ul>
-
-      <h3>Registro esercizi</h3>
-      <div class="scroll"><table>
-        <thead><tr><th>Data</th><th>Esercizio</th><th>Risultato</th><th class="hn">Errore principale</th><th>Voto</th></tr></thead>
-        <tbody id="fj-registro"></tbody>
-      </table></div>
-
-      <h3>Voto di sessione</h3>
-      <p class="note">Scala da 1 a 10, dove 6 è la sufficienza Junior.</p>
-      <div id="fj-voti"></div>
-    </section>
   </div>
 
   <footer>Aggiornato il 4 nov 2026.</footer>
@@ -294,7 +253,7 @@ footer{font-size:.78rem;color:var(--muted)}
     show(id);
     try { history.replaceState(null, '', '#' + id); } catch (e) {}
   }));
-  const go = () => { const h = location.hash.slice(1); if (h === 'panoramica' || h === 'competenze' || h === 'materiali') show(h); else if (h === 'fondamenti') { show('materiali'); document.getElementById('fondamenti').scrollIntoView(); } };
+  const go = () => { const h = location.hash.slice(1); if (h === 'panoramica' || h === 'competenze' || h === 'materiali') show(h); };
   window.addEventListener('hashchange', go); go();
   window.mostraScheda = id => { show(id); try { history.replaceState(null, '', '#' + id); } catch (e) {} window.scrollTo(0, 0); };
 
@@ -313,6 +272,9 @@ const MATERIALI = [
   { tipo: "Lavagna", titolo: "Lavagna Orion TT", progetto: "Orion TT", data: "2026-10-30",
     descrizione: "Dati di esempio, entità Player, Match e MatchSet, relazioni @ManyToOne, pagina risultato ed endpoint scelto. Si può disegnare sopra; i disegni restano nel proprio browser.",
     link: "lavagna-orion/" },
+  { tipo: "Scheda", titolo: "Fondamenti Java", progetto: "Esercizi base", data: "2026-11-05",
+    descrizione: "I concetti base di Java con il semaforo (non chiaro, con aiuto, da solo), il registro degli esercizi Exercism e CodingBat e i voti di sessione.",
+    link: "fondamenti-java/" },
 ];
 
 (function () {
@@ -350,92 +312,6 @@ const MATERIALI = [
     document.getElementById('mat-ultimo').hidden = false;
   }
   document.getElementById('mat-tutti').addEventListener('click', () => window.mostraScheda('materiali'));
-})();
-/* ===== FONDAMENTI JAVA =====
-   Si aggiorna a FINE esercizi base.
-   stato: "rosso" = non chiaro, "giallo" = con aiuto, "verde" = da solo, "" = da valutare
-   esempio: HTML breve, il codice va tra <code>...</code> */
-const FJ_PUNTO = { data: "2026-11-05", testo: "Exercism – Lasagna, task 1 (expectedMinutesInOven). Passo 1: riconoscere i pezzi di un method (access modifier, return type, nome, parameters, body)." };
-
-const CONCETTI = [
-  { nome: "Variabile", stato: "", esempio: "<code>int minutes = 40;</code> un nome che contiene un valore" },
-  { nome: "Tipo (int, String, boolean, double)", stato: "", esempio: "<code>int</code> nel metodo di Lasagna: i minuti sono numeri interi" },
-  { nome: "Class", stato: "", esempio: "<code>public class Lasagna { … }</code>" },
-  { nome: "Oggetto", stato: "", esempio: "la lasagna creata con <code>new Lasagna()</code> nei test" },
-  { nome: "new", stato: "", esempio: "<code>new Lasagna()</code> crea un oggetto dalla class" },
-  { nome: "Method", stato: "", esempio: "<code>expectedMinutesInOven()</code>" },
-  { nome: "Access modifier (public)", stato: "", esempio: "<code>public</code> in <code>public int expectedMinutesInOven()</code>" },
-  { nome: "Return type", stato: "", esempio: "<code>int</code> in <code>public int expectedMinutesInOven()</code>" },
-  { nome: "Parameter", stato: "", esempio: "<code>int actualMinutes</code> in <code>remainingMinutesInOven(int actualMinutes)</code>" },
-  { nome: "Argument", stato: "", esempio: "<code>30</code> in <code>remainingMinutesInOven(30)</code>" },
-  { nome: "return", stato: "", esempio: "<code>return 40;</code>" },
-  { nome: "Body", stato: "", esempio: "<code>{ return 40; }</code> il codice del method" },
-  { nome: "Scope { }", stato: "", esempio: "<code>actualMinutes</code> esiste solo dentro le <code>{ }</code> del suo method" },
-  { nome: "Commenti", stato: "", esempio: "<code>// minuti previsti in forno</code>" },
-];
-
-/* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
-const REGISTRO_BASE = [
-  { data: "2026-11-05", nome: "Exercism – Lasagna", risultato: "in corso", errore: "", voto: null },
-];
-
-/* una riga per sessione; criteri non osservati = null */
-const VOTI_BASE = [
-  // { data: "2026-11-05", comprensione: 5, terminologia: 4, codice: 5, chiarezza: 5 },
-];
-
-(function () {
-  const mesi = ['gen','feb','mar','apr','mag','giu','lug','ago','set','ott','nov','dic'];
-  const dataIt = d => { const [a, m, g] = d.split('-').map(Number); return g + ' ' + mesi[m - 1] + ' ' + a; };
-  const el = (tag, cls, testo) => { const e = document.createElement(tag); if (cls) e.className = cls; if (testo != null) e.textContent = testo; return e; };
-  const SEM = { rosso: ['r', 'non chiaro'], giallo: ['g', 'con aiuto'], verde: ['v', 'da solo'] };
-
-  const punto = document.getElementById('fj-punto');
-  punto.append(el('b', '', 'Punto attuale (' + dataIt(FJ_PUNTO.data) + '): '), document.createTextNode(FJ_PUNTO.testo));
-
-  const n = { rosso: 0, giallo: 0, verde: 0, '': 0 };
-  const ul = document.getElementById('fj-concetti');
-  CONCETTI.forEach(c => {
-    n[c.stato in n ? c.stato : '']++;
-    const [cls, lab] = SEM[c.stato] || ['', 'da valutare'];
-    const li = el('li'), es = el('span', 'es'); es.innerHTML = c.esempio;
-    const st = el('span', 'st'); st.append(el('span', 'sem ' + cls, lab));
-    li.append(el('span', 'nome', c.nome), es, st); ul.append(li);
-  });
-  const sum = document.getElementById('fj-sum');
-  [['verde', 'da solo'], ['giallo', 'con aiuto'], ['rosso', 'non chiari'], ['', 'da valutare']].forEach(([k, lab]) => {
-    const s = el('span'); s.append(el('b', '', String(n[k])), document.createTextNode(' ' + lab)); sum.append(s);
-  });
-
-  const tb = document.getElementById('fj-registro');
-  const PILL = { 'da solo': 'pill ok', 'con aiuto': 'pill', 'non finito': 'sem r', 'in corso': 'pill' };
-  [...REGISTRO_BASE].sort((a, b) => b.data.localeCompare(a.data)).forEach(r => {
-    const tr = el('tr');
-    const tdR = el('td'); tdR.append(el('span', PILL[r.risultato] || 'pill', r.risultato));
-    tr.append(el('td', 'm nw', dataIt(r.data)), el('td', '', r.nome), tdR, el('td', 'm hn', r.errore || '—'), el('td', 'm nw', r.voto != null ? r.voto + '/10' : '—'));
-    tb.append(tr);
-  });
-
-  const box = document.getElementById('fj-voti');
-  if (!VOTI_BASE.length) { box.append(el('p', 'vuoto', 'Ancora nessun voto: il primo arriva a fine della prima sessione di esercizi.')); return; }
-  const CRIT = [['comprensione', 'Comprensione'], ['terminologia', 'Terminologia'], ['codice', 'Scrittura del codice'], ['chiarezza', 'Chiarezza']];
-  const ultime = [...VOTI_BASE].sort((a, b) => b.data.localeCompare(a.data));
-  const u = ultime[0], val = CRIT.map(([k]) => u[k]).filter(v => v != null);
-  box.append(el('p', 'note', 'Ultima sessione: ' + dataIt(u.data) + (val.length ? ' · media ' + (val.reduce((a, b) => a + b, 0) / val.length).toFixed(1).replace('.', ',') : '')));
-  const vt = el('div', 'vt');
-  CRIT.forEach(([k, lab]) => {
-    const t = el('div', 'tile'), v = el('div', 'v', u[k] != null ? String(u[k]) : 'n.v.');
-    if (u[k] != null) v.append(el('small', '', ' /10'));
-    t.append(el('div', 'k', lab), v); vt.append(t);
-  });
-  box.append(vt);
-  if (ultime.length > 1) {
-    const w = el('div', 'scroll'), t = el('table'), th = el('tr');
-    ['Data', ...CRIT.map(c => c[1])].forEach(h => th.append(el('th', '', h)));
-    const head = el('thead'); head.append(th); const body = el('tbody');
-    ultime.forEach(r => { const tr = el('tr'); tr.append(el('td', 'm nw', dataIt(r.data))); CRIT.forEach(([k]) => tr.append(el('td', 'm', r[k] != null ? String(r[k]) : 'n.v.'))); body.append(tr); });
-    t.append(head, body); w.append(t); w.style.marginTop = '12px'; box.append(w);
-  }
 })();
 </script>
 
