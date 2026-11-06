@@ -173,13 +173,15 @@ footer{font-size:.8rem;color:var(--muted)}
    stato: "rosso" = non chiaro, "giallo" = con aiuto, "verde" = da solo, "" = da valutare */
 const FJ_PUNTO = {
   data: "2026-11-05",
-  esercizio: "Ticket ORION-12 – TrainingSession · task 3 e 4",
-  passo: "Chiamare un method dentro un altro, passandogli il parameter."
+  esercizio: "Ticket ORION-12 – TrainingSession · task 3 e 4 (lunedì, riscaldamento)",
+  passo: "Riapplicare da solo il method dentro un method, già riuscito su Lasagna."
 };
 
 const CONCETTI = [
   { gruppo: "I dati", nome: "Variabile", stato: "", def: "Un nome che contiene un valore.", codice: "int minutes = 40;", nota: "minutes è la variabile, 40 il valore." },
   { gruppo: "I dati", nome: "Tipo", stato: "giallo", def: "Dice che genere di valore c'è dentro: int, String, boolean, double.", codice: "int minutes = 40;", nota: "int = numero intero, come i minuti di Lasagna." },
+  { gruppo: "I dati", nome: "int vs Long", stato: "giallo", def: "Long è un intero più grande; un valore Long si scrive con la L finale.", codice: "player.setId(8L);", nota: "Gli id delle Entity sono Long." },
+  { gruppo: "I dati", nome: "Lista vs oggetto singolo", stato: "giallo", def: "get(0) e $[0] servono solo con le liste; un oggetto singolo si legge direttamente.", codice: "jsonPath(\"$.firstName\")", nota: "La POST restituisce un oggetto, non una lista." },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
 
   { gruppo: "Class e oggetti", nome: "Class", stato: "giallo", def: "Lo stampo: descrive com'è fatta una cosa.", codice: "public class Lasagna { … }", nota: "" },
@@ -189,12 +191,12 @@ const CONCETTI = [
   { gruppo: "Il method", nome: "Method", stato: "verde", def: "Un blocco di codice con un nome, che fa una cosa.", codice: "public int expectedMinutesInOven() {\n    return 40;\n}", nota: "" },
   { gruppo: "Il method", nome: "Access modifier", stato: "verde", def: "Chi può usare il method. public = tutti.", codice: "public int expectedMinutesInOven()", nota: "È la prima parola: public." },
   { gruppo: "Il method", nome: "Return type", stato: "verde", def: "Il tipo del valore che il method restituisce.", codice: "public int expectedMinutesInOven()", nota: "int: restituisce un numero intero." },
-  { gruppo: "Il method", nome: "Parameter", stato: "giallo", def: "Un valore che il method riceve, scritto come tipo + nome.", codice: "remainingMinutesInOven(int actualMinutes)", nota: "int actualMinutes è il parameter." },
+  { gruppo: "Il method", nome: "Parameter", stato: "verde", def: "Un valore che il method riceve, scritto come tipo + nome.", codice: "remainingMinutesInOven(int actualMinutes)", nota: "int actualMinutes è il parameter." },
   { gruppo: "Il method", nome: "Argument", stato: "giallo", def: "Il valore vero che passi quando chiami il method.", codice: "remainingMinutesInOven(30)", nota: "30 è l'argument." },
   { gruppo: "Il method", nome: "return", stato: "verde", def: "Restituisce il valore e chiude il method.", codice: "return 40;", nota: "" },
   { gruppo: "Il method", nome: "Body", stato: "verde", def: "Il codice dentro le graffe del method.", codice: "{\n    return 40;\n}", nota: "" },
-  { gruppo: "Il method", nome: "Definire vs chiamare", stato: "giallo", def: "Definire = scrivere il method dentro la class. Chiamare = usarlo, con le ().", codice: "lasagna.expectedMinutesInOven()", nota: "Nella class lo definisci, il test lo chiama." },
-  { gruppo: "Il method", nome: "Chiamare un method dentro un altro", stato: "rosso", def: "Un method ne usa un altro e gli passa il proprio parameter.", codice: "return drillsTimeInMinutes(numberOfDrills);", nota: "Si passa il nome del parameter, non un numero." },
+  { gruppo: "Il method", nome: "Definire vs chiamare", stato: "verde", def: "Definire = scrivere il method dentro la class. Chiamare = usarlo, con le ().", codice: "lasagna.expectedMinutesInOven()", nota: "Nella class lo definisci, il test lo chiama." },
+  { gruppo: "Il method", nome: "Chiamare un method dentro un altro", stato: "verde", def: "Un method ne usa un altro e gli passa il proprio parameter.", codice: "return drillsTimeInMinutes(numberOfDrills);", nota: "Si passa il nome del parameter, non un numero." },
   { gruppo: "Il method", nome: "Scope { }", stato: "", def: "Dove esiste una variabile: dentro le sue graffe.", codice: "remainingMinutesInOven(int actualMinutes) {\n    // actualMinutes esiste solo qui\n}", nota: "" },
 
   { gruppo: "Costanti e nomi", nome: "Constant", stato: "verde", def: "Un valore che non cambia mai: private static final, nome in UPPER_SNAKE_CASE.", codice: "private static final int EXPECTED_MINUTES = 40;", nota: "Ogni constant ha un nome unico." },
@@ -204,6 +206,11 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-06", nome: "Exercism – Lasagna (rifatta da zero)", risultato: "con aiuto", errore: "() dopo un parameter; int dentro la chiamata; secondo parameter nel method sbagliato", voto: 6 },
+  { data: "2026-11-06", nome: "Orion TT – POST, Service (createPlayer)", risultato: "con aiuto", errore: "Return type int; parameter senza nome; save() senza playerRepository", voto: 7 },
+  { data: "2026-11-06", nome: "Orion TT – POST, Controller", risultato: "con aiuto", errore: "player.save() invece di playerService.createPlayer(); percorso ripetuto in @PostMapping", voto: 6 },
+  { data: "2026-11-06", nome: "Test del Service createPlayer", risultato: "da solo", errore: "Un solo Player invece di player e savedPlayer; setId(8) invece di 8L", voto: 7 },
+  { data: "2026-11-06", nome: "Test del Controller createPlayer", risultato: "con aiuto", errore: "$[0] su un oggetto singolo; mancava .content(...)", voto: 5 },
   { data: "2026-11-05", nome: "Exercism – Lasagna", risultato: "con aiuto", errore: "() dopo i parameters; un valore (30) al posto del nome del parameter", voto: 6 },
   { data: "2026-11-05", nome: "TableTennisMatch (4 method)", risultato: "da solo", errore: "Numeri degli esempi scritti nel codice invece dei parameters", voto: 7 },
   { data: "2026-11-05", nome: "Ticket ORION-12 – TrainingSession", risultato: "non finito", errore: "Chiamare un method dentro un altro passandogli il parameter; due constant con lo stesso nome", voto: 5 },
@@ -212,9 +219,10 @@ const REGISTRO_BASE = [
 /* una riga per sessione; criterio non osservato = null */
 const VOTI_BASE = [
   { data: "2026-11-05", comprensione: 6, terminologia: 6, codice: 6, chiarezza: 6 },
+  { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-05";
+const AGGIORNATO = "2026-11-06";
 </script>
 
 <script>
