@@ -206,6 +206,11 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-09", nome: "Orion TT – colonna email da phpMyAdmin", risultato: "con aiuto", errore: "INSERT invece di ALTER TABLE; String invece di VARCHAR", voto: 6 },
+  { data: "2026-11-09", nome: "Orion TT – campo email in Player", risultato: "da solo", errore: "Dubbio su @Column facoltativa", voto: 7 },
+  { data: "2026-11-09", nome: "Orion TT – email nel DTO e nel mapping", risultato: "con aiuto", errore: "Cercava il mapping nel Controller (è nel Service); getEmail senza ()", voto: 7 },
+  { data: "2026-11-09", nome: "Test del Controller GET con email", risultato: "da solo", errore: "Virgola mancante; email diverse tra DTO e controllo", voto: 6 },
+  { data: "2026-11-09", nome: "Test del Controller POST con email", risultato: "con aiuto", errore: "\";\" che chiude la catena di andExpect; \"Email\" maiuscola nel JSON", voto: 6 },
   { data: "2026-11-06", nome: "Exercism – Lasagna (rifatta da zero)", risultato: "con aiuto", errore: "() dopo un parameter; int dentro la chiamata; secondo parameter nel method sbagliato", voto: 6 },
   { data: "2026-11-06", nome: "Orion TT – POST, Service (createPlayer)", risultato: "con aiuto", errore: "Return type int; parameter senza nome; save() senza playerRepository", voto: 7 },
   { data: "2026-11-06", nome: "Orion TT – POST, Controller", risultato: "con aiuto", errore: "player.save() invece di playerService.createPlayer(); percorso ripetuto in @PostMapping", voto: 6 },
@@ -222,7 +227,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-06";
+const AGGIORNATO = "2026-11-09";
 </script>
 
 <script>
