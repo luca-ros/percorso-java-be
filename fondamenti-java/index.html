@@ -184,8 +184,8 @@ const CONCETTI = [
   { gruppo: "I dati", nome: "Lista vs oggetto singolo", stato: "giallo", def: "get(0) e $[0] servono solo con le liste; un oggetto singolo si legge direttamente.", codice: "jsonPath(\"$.firstName\")", nota: "La POST restituisce un oggetto, non una lista." },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
 
-  { gruppo: "Class e oggetti", nome: "Class", stato: "giallo", def: "Lo stampo: descrive com'è fatta una cosa.", codice: "public class Lasagna { … }", nota: "" },
-  { gruppo: "Class e oggetti", nome: "Oggetto", stato: "giallo", def: "Una cosa vera creata dallo stampo.", codice: "Lasagna lasagna = new Lasagna();", nota: "lasagna è l'oggetto, Lasagna la class." },
+  { gruppo: "Class e oggetti", nome: "Class", stato: "rosso", def: "Lo stampo: descrive com'è fatta una cosa.", codice: "public class Lasagna { … }", nota: "" },
+  { gruppo: "Class e oggetti", nome: "Oggetto", stato: "rosso", def: "Una cosa vera creata dallo stampo.", codice: "Lasagna lasagna = new Lasagna();", nota: "lasagna è l'oggetto, Lasagna la class." },
   { gruppo: "Class e oggetti", nome: "new", stato: "giallo", def: "La parola che crea un oggetto da una class.", codice: "new Lasagna()", nota: "" },
 
   { gruppo: "Il method", nome: "Method", stato: "verde", def: "Un blocco di codice con un nome, che fa una cosa.", codice: "public int expectedMinutesInOven() {\n    return 40;\n}", nota: "" },
@@ -197,6 +197,7 @@ const CONCETTI = [
   { gruppo: "Il method", nome: "Body", stato: "verde", def: "Il codice dentro le graffe del method.", codice: "{\n    return 40;\n}", nota: "" },
   { gruppo: "Il method", nome: "Definire vs chiamare", stato: "verde", def: "Definire = scrivere il method dentro la class. Chiamare = usarlo, con le ().", codice: "lasagna.expectedMinutesInOven()", nota: "Nella class lo definisci, il test lo chiama." },
   { gruppo: "Il method", nome: "Chiamare un method dentro un altro", stato: "verde", def: "Un method ne usa un altro e gli passa il proprio parameter.", codice: "return drillsTimeInMinutes(numberOfDrills);", nota: "Si passa il nome del parameter, non un numero." },
+  { gruppo: "Il method", nome: "Firma vs chiamata", stato: "giallo", def: "Nella firma scrivi tipo + nome; nella chiamata passi solo i valori, mai il tipo.", codice: "updateEmailPlayer(Long id, String email)  // firma\nupdateEmailPlayer(1L, \"a@b.it\")        // chiamata", nota: "" },
   { gruppo: "Il method", nome: "Scope { }", stato: "", def: "Dove esiste una variabile: dentro le sue graffe.", codice: "remainingMinutesInOven(int actualMinutes) {\n    // actualMinutes esiste solo qui\n}", nota: "" },
 
   { gruppo: "Costanti e nomi", nome: "Constant", stato: "verde", def: "Un valore che non cambia mai: private static final, nome in UPPER_SNAKE_CASE.", codice: "private static final int EXPECTED_MINUTES = 40;", nota: "Ogni constant ha un nome unico." },
@@ -206,6 +207,13 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-10", nome: "Riscaldamento: database e Flyway", risultato: "con aiuto", errore: "INSERT invece di ALTER TABLE; Flyway e MySQL descritti male", voto: 5 },
+  { data: "2026-11-10", nome: "Firma di updateEmailPlayer nel Service", risultato: "con aiuto", errore: "Classe inesistente come tipo; ordine tipo e nome; long minuscolo", voto: 5 },
+  { data: "2026-11-10", nome: "findById con 400 e 404 nel Service", risultato: "da solo", errore: "PlayerDTO come tipo della variabile; return troppo presto", voto: 7 },
+  { data: "2026-11-10", nome: "Sanificazione, save e DTO di ritorno", risultato: "con aiuto", errore: "private static final dentro un method; Player al posto di String", voto: 5 },
+  { data: "2026-11-10", nome: "EmailUpdateDTO e PATCH nel Controller", risultato: "con aiuto", errore: "Chiamata sul parameter request invece che su playerService; tipo nella chiamata", voto: 6 },
+  { data: "2026-11-10", nome: "Debug del 500 con Postman", risultato: "da solo", errore: "", voto: 8 },
+  { data: "2026-11-10", nome: "Test del Service sulla sanificazione", risultato: "da solo", errore: "when su save invece di findById; Optional mancante", voto: 6 },
   { data: "2026-11-09", nome: "Orion TT – colonna email da phpMyAdmin", risultato: "con aiuto", errore: "INSERT invece di ALTER TABLE; String invece di VARCHAR", voto: 6 },
   { data: "2026-11-09", nome: "Orion TT – campo email in Player", risultato: "da solo", errore: "Dubbio su @Column facoltativa", voto: 7 },
   { data: "2026-11-09", nome: "Orion TT – email nel DTO e nel mapping", risultato: "con aiuto", errore: "Cercava il mapping nel Controller (è nel Service); getEmail senza ()", voto: 7 },
@@ -227,7 +235,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-09";
+const AGGIORNATO = "2026-11-10";
 </script>
 
 <script>
