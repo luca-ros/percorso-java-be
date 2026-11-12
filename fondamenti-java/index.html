@@ -173,8 +173,8 @@ footer{font-size:.8rem;color:var(--muted)}
    stato: "rosso" = non chiaro, "giallo" = con aiuto, "verde" = da solo, "" = da valutare */
 const FJ_PUNTO = {
   data: "2026-11-05",
-  esercizio: "Ticket ORION-12 – TrainingSession · task 3 e 4 (lunedì, riscaldamento)",
-  passo: "Riapplicare da solo il method dentro un method, già riuscito su Lasagna."
+  esercizio: "Classe Racket (brand, weight) · costruttore",
+  passo: "Creare l'oggetto con new Racket(\"Butterfly\", 85)."
 };
 
 const CONCETTI = [
@@ -199,6 +199,8 @@ const CONCETTI = [
   { gruppo: "Il method", nome: "Definire vs chiamare", stato: "verde", def: "Definire = scrivere il method dentro la class. Chiamare = usarlo, con le ().", codice: "lasagna.expectedMinutesInOven()", nota: "Nella class lo definisci, il test lo chiama." },
   { gruppo: "Il method", nome: "Chiamare un method dentro un altro", stato: "verde", def: "Un method ne usa un altro e gli passa il proprio parameter.", codice: "return drillsTimeInMinutes(numberOfDrills);", nota: "Si passa il nome del parameter, non un numero." },
   { gruppo: "Il method", nome: "Firma vs chiamata", stato: "giallo", def: "Nella firma scrivi tipo + nome; nella chiamata passi solo i valori, mai il tipo.", codice: "updateEmailPlayer(Long id, String email)  // firma\nupdateEmailPlayer(1L, \"a@b.it\")        // chiamata", nota: "" },
+  { gruppo: "Class e oggetti", nome: "Costruttore", stato: "giallo", def: "Crea l'oggetto: stesso nome della class, niente tipo di ritorno, this.campo = parameter.", codice: "public Racket(String brand, int weight) {\n    this.brand = brand;\n}", nota: "this.brand, non this.Racket." },
+  { gruppo: "I dati", nome: ".equals vs ==", stato: "giallo", def: ".equals confronta oggetti (Long, String); == solo i tipi primitivi (int).", codice: "request.getPlayer1Id().equals(request.getPlayer2Id())", nota: "" },
   { gruppo: "Il method", nome: "Scope { }", stato: "", def: "Dove esiste una variabile: dentro le sue graffe.", codice: "remainingMinutesInOven(int actualMinutes) {\n    // actualMinutes esiste solo qui\n}", nota: "" },
 
   { gruppo: "Costanti e nomi", nome: "Constant", stato: "verde", def: "Un valore che non cambia mai: private static final, nome in UPPER_SNAKE_CASE.", codice: "private static final int EXPECTED_MINUTES = 40;", nota: "Ogni constant ha un nome unico." },
@@ -208,6 +210,15 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-12", nome: "Richiesta PATCH in Postman", risultato: "con aiuto", errore: "Metodo e URL sbagliati; {id} scritto letterale", voto: 5 },
+  { data: "2026-11-12", nome: "Helper getPlayerDTOMock()", risultato: "con aiuto", errore: "when dentro l'helper; manca il return", voto: 6 },
+  { data: "2026-11-12", nome: "Test PATCH 200 nel Controller", risultato: "con aiuto", errore: "🔁 when sul Controller invece che sul Service; 🔁 body senza la chiave email", voto: 6 },
+  { data: "2026-11-12", nome: "Test PATCH 400 nel Controller", risultato: "da solo", errore: "isInvalid invece di isBadRequest", voto: 7 },
+  { data: "2026-11-12", nome: "POST /api/matches in Postman", risultato: "da solo", errore: "", voto: 7 },
+  { data: "2026-11-12", nome: "Fix: stesso giocatore due volte", risultato: "con aiuto", errore: "🔁 Controllo nel Controller invece che nel Service; == invece di .equals", voto: 6 },
+  { data: "2026-11-12", nome: "Spiegazione del diagramma dei set", risultato: "da solo", errore: "setNumber confuso con i set vinti; 404 vs 409", voto: 7 },
+  { data: "2026-11-12", nome: "UNIQUE su match_sets", risultato: "con aiuto", errore: "Nome della tabella al singolare", voto: 6 },
+  { data: "2026-11-12", nome: "Costruttore Racket", risultato: "in corso", errore: "🔁 Parameter senza nome; this.Racket", voto: 5 },
   { data: "2026-11-11", nome: "Dipendenza validation nel pom.xml", risultato: "con aiuto", errore: "Cercava un DTO nel pom; parent al posto dello starter", voto: 5 },
   { data: "2026-11-11", nome: "@NotBlank + @Email nel DTO", risultato: "con aiuto", errore: "Messa solo @Email", voto: 6 },
   { data: "2026-11-11", nome: "@Valid nel Controller", risultato: "da solo", errore: "", voto: 8 },
@@ -245,7 +256,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-11";
+const AGGIORNATO = "2026-11-12";
 </script>
 
 <script>
