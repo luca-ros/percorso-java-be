@@ -182,6 +182,7 @@ const CONCETTI = [
   { gruppo: "I dati", nome: "Tipo", stato: "giallo", def: "Dice che genere di valore c'è dentro: int, String, boolean, double.", codice: "int minutes = 40;", nota: "int = numero intero, come i minuti di Lasagna." },
   { gruppo: "I dati", nome: "int vs Long", stato: "giallo", def: "Long è un intero più grande; un valore Long si scrive con la L finale.", codice: "player.setId(8L);", nota: "Gli id delle Entity sono Long." },
   { gruppo: "I dati", nome: "Lista vs oggetto singolo", stato: "giallo", def: "get(0) e $[0] servono solo con le liste; un oggetto singolo si legge direttamente.", codice: "jsonPath(\"$.firstName\")", nota: "La POST restituisce un oggetto, non una lista." },
+  { gruppo: "I dati", nome: "Enum", stato: "giallo", def: "Un tipo con pochi valori fissi; si scrive NomeEnum.VALORE.", codice: "match.setStatus(MatchStatus.SCHEDULED);", nota: "Come HttpStatus.NOT_FOUND." },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
 
   { gruppo: "Class e oggetti", nome: "Class", stato: "rosso", def: "Lo stampo: descrive com'è fatta una cosa.", codice: "public class Lasagna { … }", nota: "" },
@@ -207,6 +208,15 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-11", nome: "Dipendenza validation nel pom.xml", risultato: "con aiuto", errore: "Cercava un DTO nel pom; parent al posto dello starter", voto: 5 },
+  { data: "2026-11-11", nome: "@NotBlank + @Email nel DTO", risultato: "con aiuto", errore: "Messa solo @Email", voto: 6 },
+  { data: "2026-11-11", nome: "@Valid nel Controller", risultato: "da solo", errore: "", voto: 8 },
+  { data: "2026-11-11", nome: "Helper method nel test del Service", risultato: "da solo", errore: "Import inutilizzati", voto: 8 },
+  { data: "2026-11-11", nome: "ALTER TABLE su matches", risultato: "con aiuto", errore: "DROP COLUMN bloccato dalla foreign key", voto: 6 },
+  { data: "2026-11-11", nome: "Campo plannedDate in Match", risultato: "con aiuto", errore: "Tipo sbagliato (MatchStatus, Match) e virgolette sul nome del campo", voto: 5 },
+  { data: "2026-11-11", nome: "createMatch nel Service", risultato: "con aiuto", errore: "🔁 match.save() invece di matchRepository.save(match); Integer invece di Long", voto: 5 },
+  { data: "2026-11-11", nome: "POST nel MatchController", risultato: "con aiuto", errore: "🔁 Parameter senza tipo e nome; due tipi di ritorno", voto: 5 },
+  { data: "2026-11-11", nome: "Git: commit separati", risultato: "con aiuto", errore: "Commit partito per sbaglio, recuperato con git reset HEAD~1", voto: 6 },
   { data: "2026-11-10", nome: "Riscaldamento: database e Flyway", risultato: "con aiuto", errore: "INSERT invece di ALTER TABLE; Flyway e MySQL descritti male", voto: 5 },
   { data: "2026-11-10", nome: "Firma di updateEmailPlayer nel Service", risultato: "con aiuto", errore: "Classe inesistente come tipo; ordine tipo e nome; long minuscolo", voto: 5 },
   { data: "2026-11-10", nome: "findById con 400 e 404 nel Service", risultato: "da solo", errore: "PlayerDTO come tipo della variabile; return troppo presto", voto: 7 },
@@ -235,7 +245,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-10";
+const AGGIORNATO = "2026-11-11";
 </script>
 
 <script>
