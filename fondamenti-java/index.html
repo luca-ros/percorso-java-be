@@ -178,11 +178,12 @@ const FJ_PUNTO = {
 };
 
 const CONCETTI = [
-  { gruppo: "I dati", nome: "Variabile", stato: "", def: "Un nome che contiene un valore.", codice: "int minutes = 40;", nota: "minutes è la variabile, 40 il valore." },
+  { gruppo: "I dati", nome: "Variabile", stato: "rosso", def: "Un nome che contiene un valore: Tipo nome = valore o chiamata. Si usa solo dopo averla dichiarata.", codice: "Match match = getMatchById(id);", nota: "Prima la dichiari, poi la usi." },
   { gruppo: "I dati", nome: "Tipo", stato: "giallo", def: "Dice che genere di valore c'è dentro: int, String, boolean, double.", codice: "int minutes = 40;", nota: "int = numero intero, come i minuti di Lasagna." },
   { gruppo: "I dati", nome: "int vs Long", stato: "giallo", def: "Long è un intero più grande; un valore Long si scrive con la L finale.", codice: "player.setId(8L);", nota: "Gli id delle Entity sono Long." },
   { gruppo: "I dati", nome: "Lista vs oggetto singolo", stato: "giallo", def: "get(0) e $[0] servono solo con le liste; un oggetto singolo si legge direttamente.", codice: "jsonPath(\"$.firstName\")", nota: "La POST restituisce un oggetto, non una lista." },
   { gruppo: "I dati", nome: "Enum", stato: "giallo", def: "Un tipo con pochi valori fissi; si scrive NomeEnum.VALORE.", codice: "match.setStatus(MatchStatus.SCHEDULED);", nota: "Come HttpStatus.NOT_FOUND." },
+  { gruppo: "I dati", nome: "Classe vs tabella", stato: "giallo", def: "Nel codice si usa il nome della classe Java, non quello della tabella MySQL.", codice: "JpaRepository<MatchSet, Long>  // non match_sets", nota: "" },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
 
   { gruppo: "Class e oggetti", nome: "Class", stato: "rosso", def: "Lo stampo: descrive com'è fatta una cosa.", codice: "public class Lasagna { … }", nota: "" },
@@ -192,7 +193,7 @@ const CONCETTI = [
   { gruppo: "Il method", nome: "Method", stato: "verde", def: "Un blocco di codice con un nome, che fa una cosa.", codice: "public int expectedMinutesInOven() {\n    return 40;\n}", nota: "" },
   { gruppo: "Il method", nome: "Access modifier", stato: "verde", def: "Chi può usare il method. public = tutti.", codice: "public int expectedMinutesInOven()", nota: "È la prima parola: public." },
   { gruppo: "Il method", nome: "Return type", stato: "verde", def: "Il tipo del valore che il method restituisce.", codice: "public int expectedMinutesInOven()", nota: "int: restituisce un numero intero." },
-  { gruppo: "Il method", nome: "Parameter", stato: "verde", def: "Un valore che il method riceve, scritto come tipo + nome.", codice: "remainingMinutesInOven(int actualMinutes)", nota: "int actualMinutes è il parameter." },
+  { gruppo: "Il method", nome: "Parameter", stato: "giallo", def: "Un valore che il method riceve, scritto come tipo + nome.", codice: "remainingMinutesInOven(int actualMinutes)", nota: "int actualMinutes è il parameter." },
   { gruppo: "Il method", nome: "Argument", stato: "giallo", def: "Il valore vero che passi quando chiami il method.", codice: "remainingMinutesInOven(30)", nota: "30 è l'argument." },
   { gruppo: "Il method", nome: "return", stato: "verde", def: "Restituisce il valore e chiude il method.", codice: "return 40;", nota: "" },
   { gruppo: "Il method", nome: "Body", stato: "verde", def: "Il codice dentro le graffe del method.", codice: "{\n    return 40;\n}", nota: "" },
@@ -210,6 +211,14 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-13", nome: "Verifica del diagramma blocco per blocco", risultato: "con aiuto", errore: "🔁 Status nel set invece che nella partita; 🔁 set_number vs set vinti", voto: 6 },
+  { data: "2026-11-13", nome: "Scelta del verbo per l'avvio (POST)", risultato: "da solo", errore: "", voto: 8 },
+  { data: "2026-11-13", nome: "MatchSetRepository", risultato: "con aiuto", errore: "Generics con il nome della tabella invece della classe", voto: 5 },
+  { data: "2026-11-13", nome: "Collegamento nel costruttore del Service", risultato: "con aiuto", errore: "Parameter mancante", voto: 5 },
+  { data: "2026-11-13", nome: "Method startMatch nel Controller", risultato: "con aiuto", errore: "🔁 Parameter senza tipo; @GetMapping al posto di @PostMapping", voto: 4 },
+  { data: "2026-11-13", nome: "startMatch nel Service", risultato: "con aiuto", errore: "Variabile usata prima della dichiarazione; findById copiato invece di riusare getMatchById", voto: 5 },
+  { data: "2026-11-13", nome: "Test Postman (4 casi) + verifica nel DB", risultato: "da solo", errore: "", voto: 8 },
+  { data: "2026-11-13", nome: "Messaggio di commit", risultato: "da solo", errore: "", voto: 8 },
   { data: "2026-11-12", nome: "Richiesta PATCH in Postman", risultato: "con aiuto", errore: "Metodo e URL sbagliati; {id} scritto letterale", voto: 5 },
   { data: "2026-11-12", nome: "Helper getPlayerDTOMock()", risultato: "con aiuto", errore: "when dentro l'helper; manca il return", voto: 6 },
   { data: "2026-11-12", nome: "Test PATCH 200 nel Controller", risultato: "con aiuto", errore: "🔁 when sul Controller invece che sul Service; 🔁 body senza la chiave email", voto: 6 },
@@ -256,7 +265,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-12";
+const AGGIORNATO = "2026-11-13";
 </script>
 
 <script>
