@@ -183,6 +183,8 @@ const CONCETTI = [
   { gruppo: "I dati", nome: "int vs Long", stato: "giallo", def: "Long è un intero più grande; un valore Long si scrive con la L finale.", codice: "player.setId(8L);", nota: "Gli id delle Entity sono Long." },
   { gruppo: "I dati", nome: "Lista vs oggetto singolo", stato: "giallo", def: "get(0) e $[0] servono solo con le liste; un oggetto singolo si legge direttamente.", codice: "jsonPath(\"$.firstName\")", nota: "La POST restituisce un oggetto, non una lista." },
   { gruppo: "I dati", nome: "Enum", stato: "giallo", def: "Un tipo con pochi valori fissi; si scrive NomeEnum.VALORE.", codice: "match.setStatus(MatchStatus.SCHEDULED);", nota: "Come HttpStatus.NOT_FOUND." },
+  { gruppo: "I dati", nome: "Optional", stato: "giallo", def: "Un contenitore che ha il valore oppure è vuoto. orElseThrow: dammi il valore, altrimenti lancia l'eccezione.", codice: "Match match = matchRepository.findById(id).orElseThrow(() -> new ...);", nota: "Non è il body: il body è la parte di una richiesta HTTP." },
+  { gruppo: "Class e oggetti", nome: "Getter e setter", stato: "giallo", def: "Il setter assegna un valore al campo, il getter lo legge.", codice: "match.setStatus(MatchStatus.IN_PROGRESS);", nota: "setStatus non guarda lo status: lo cambia." },
   { gruppo: "I dati", nome: "Classe vs tabella", stato: "giallo", def: "Nel codice si usa il nome della classe Java, non quello della tabella MySQL.", codice: "JpaRepository<MatchSet, Long>  // non match_sets", nota: "" },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
 
@@ -211,6 +213,11 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-16", nome: "Riscaldamento su carta: firme e riga findById + orElseThrow", risultato: "con aiuto", errore: "🔁 Maiuscole nei nomi: StartMatch, MatchRepository", voto: 6 },
+  { data: "2026-11-16", nome: "Helper getMatchMock() (SCHEDULED)", risultato: "con aiuto", errore: "Status IN_PROGRESS nel mock invece di SCHEDULED (prima/dopo)", voto: 5 },
+  { data: "2026-11-16", nome: "Test startMatch caso 200", risultato: "con aiuto", errore: "Voleva mockare matchService, la class che si testa; Assert su id invece dello status", voto: 6 },
+  { data: "2026-11-16", nome: "Test startMatch caso 409 (assertThrows)", risultato: "con aiuto", errore: "Bloccato sull'Act; refuso nel nome del test", voto: 5 },
+  { data: "2026-11-16", nome: "Commit separati test: e docs:", risultato: "da solo", errore: "Dimenticato il push dopo l'ultimo commit", voto: 7 },
   { data: "2026-11-13", nome: "Verifica del diagramma blocco per blocco", risultato: "con aiuto", errore: "🔁 Status nel set invece che nella partita; 🔁 set_number vs set vinti", voto: 6 },
   { data: "2026-11-13", nome: "Scelta del verbo per l'avvio (POST)", risultato: "da solo", errore: "", voto: 8 },
   { data: "2026-11-13", nome: "MatchSetRepository", risultato: "con aiuto", errore: "Generics con il nome della tabella invece della classe", voto: 5 },
@@ -265,7 +272,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-13";
+const AGGIORNATO = "2026-11-16";
 </script>
 
 <script>
