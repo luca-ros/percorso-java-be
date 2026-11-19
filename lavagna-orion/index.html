@@ -45,10 +45,10 @@ button.danger{color:var(--rubber)}
 .hint{font-size:13px;color:var(--muted)}
 
 .viewport{position:relative;overflow:auto;height:max(480px,72vh);border:1px solid var(--line);border-radius:12px;background:var(--paper);touch-action:pan-x pan-y}
-.board{position:relative;width:1420px;height:1420px;transform-origin:0 0;
+.board{position:relative;width:1420px;height:2320px;transform-origin:0 0;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
 svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:none;z-index:5}
+canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:none;z-index:5}
 .drawing canvas.ink{pointer-events:auto;cursor:crosshair}
 
 .item{position:absolute;z-index:2;user-select:none;touch-action:none}
@@ -119,6 +119,15 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
 .readonly .edit-only{display:none}
 .readonly .note .x{display:none}
 #confirm[hidden]{display:none!important}
+.key.uk{background:transparent;border:1px solid var(--table);color:var(--table)}
+.new{font:600 9.5px var(--f-body);letter-spacing:.06em;text-transform:uppercase;color:var(--rubber);margin-left:6px}
+.flow{max-width:340px}
+.flow .body{padding:10px 14px 12px;display:flex;flex-direction:column;gap:8px}
+.flow ol{margin:0;padding-left:18px;display:flex;flex-direction:column;gap:6px;font-size:13px}
+.flow code,.roles code{font:500 12px var(--f-mono);background:var(--chip);padding:1px 5px;border-radius:4px}
+.flow p{margin:0;font-size:12.5px;color:var(--muted)}
+.roles td:not(:first-child),.roles th:not(:first-child){text-align:center}
+.roles td{padding:4px 8px 4px 0;font-family:var(--f-body)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -129,7 +138,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
   <header>
     <a class="back" href="../#materiali">← Percorso Java BE</a>
     <h1>Orion TT · <span>schema</span> del ragionamento</h1>
-    <p class="lead" id="lead">Lo schizzo del tutor, nello stesso ordine, con quello che abbiamo deciso finora. Trascina le schede, disegna con la penna e aggiungi note.</p>
+    <p class="lead" id="lead">Lo schizzo del tutor, nello stesso ordine, con quello che abbiamo deciso finora. Aggiornata al 19/11/2026: iscrizione, accesso e pagina personale (sezioni 7 e 8). Trascina le schede, disegna con la penna e aggiungi note.</p>
   </header>
 
   <div class="toolbar" role="toolbar" aria-label="Strumenti lavagna">
@@ -182,6 +191,8 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
       <div class="sec" style="left:430px;top:980px"><b>5</b>Pagina web risultato</div>
       <div class="sec" style="left:800px;top:980px"><b>6</b>Che endpoint creare?</div>
       <div class="sec" style="left:1080px;top:20px">Appunti</div>
+      <div class="sec" style="left:40px;top:1460px"><b>7</b>Iscrizione e accesso · 19/11</div>
+      <div class="sec" style="left:40px;top:2020px"><b>8</b>Pagina personale · oggi</div>
 
       <!-- 1 · ENTITÀ -->
       <section class="item card entity" id="c-player" data-x="40" data-y="60">
@@ -190,6 +201,9 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
           <li><span class="key">PK</span><span>id</span></li>
           <li><span class="key no">·</span><span>first_name</span></li>
           <li><span class="key no">·</span><span>last_name</span></li>
+          <li><span class="key uk">UK</span><span class="name">email<em>facoltativa · unica se c'è</em></span></li>
+          <li><span class="key uk">UK</span><span class="name"><span>fitet_card_number<span class="new">nuovo</span></span><em>confermata · facoltativa</em></span></li>
+          <li><span class="key no">·</span><span class="name"><span>is_guest<span class="new">nuovo</span></span><em>true = ospite</em></span></li>
         </ul>
       </section>
 
@@ -299,9 +313,9 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
       </section>
 
       <aside class="item note question" id="n-question" data-x="800" data-y="1220">
-        <div class="grip"><span>Domanda aperta · siamo qui</span></div>
+        <div class="grip"><span>Domanda risolta</span></div>
         <strong>MatchController chiede il risultato al MatchService. Di quali Repository ha bisogno il Service?</strong>
-        Deciso: l'endpoint va in MatchController, perché la risorsa dell'URL è il match.
+        MatchRepository per leggere la partita (i set arrivano con @OneToMany); MatchSetRepository per salvare i set.
       </aside>
 
       <!-- APPUNTI -->
@@ -315,10 +329,13 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
           <li>PK identifica la riga, FK punta a un'altra tabella</li>
           <li>All'utente si mostrano date reali, non quelle tecniche</li>
           <li>Il Controller si sceglie dalla risorsa dell'URL, non dalle tabelle che legge</li>
+          <li>Chi accede (account) è separato da chi gioca (player)</li>
+          <li>Ruolo = cosa puoi fare · attributo = chi sei (is_guest, tessera)</li>
+          <li>L'id è una chiave surrogata: lo genera il DB, non dipende da dati personali</li>
         </ul>
       </aside>
 
-      <aside class="item note" id="n-steps" data-x="1080" data-y="440">
+      <aside class="item note" id="n-steps" data-x="1080" data-y="580">
         <div class="grip"><span>Il metodo</span></div>
         <ol>
           <li class="done">Dati di esempio coerenti ✓</li>
@@ -326,8 +343,80 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
           <li class="done">Relazioni ✓</li>
           <li class="done">Output della pagina ✓</li>
           <li class="done">Endpoint ✓</li>
-          <li>Strati: Controller · Service · Repository ← siamo qui</li>
+          <li class="done">Strati: Controller · Service · Repository ✓</li>
+          <li class="done">Design iscrizione e accesso ✓ (19/11)</li>
+          <li>Pagina personale ← siamo qui</li>
+          <li class="todo">Iscrizione: Account, PENDING, pannello admin</li>
+          <li class="todo">Accesso: link email, Spring Security</li>
         </ol>
+      </aside>
+
+      <!-- 7 · ISCRIZIONE E ACCESSO -->
+      <section class="item card entity" id="c-account" data-x="40" data-y="1500">
+        <h2>Account <small>tabella accounts · nuova</small></h2>
+        <ul class="fields">
+          <li><span class="key">PK</span><span>id</span></li>
+          <li><span class="key uk">UK</span><span class="name">email<em>obbligatoria · per accedere</em></span></li>
+          <li><span class="key no">·</span><span class="name">password_hash<em>mai in chiaro · null finché non la imposta</em></span></li>
+          <li><span class="key no">·</span><span class="name">role<em>ADMIN · PLAYER</em></span></li>
+          <li><span class="key no">·</span><span class="name">status<em>PENDING · APPROVED · REJECTED</em></span></li>
+          <li><span class="key no">·</span><span class="name">first_name · last_name<em>dichiarati all'iscrizione</em></span></li>
+          <li><span class="key no">·</span><span class="name">fitet_card_number<em>dichiarata · l'admin la verifica</em></span></li>
+          <li><span class="key fk">FK</span><span class="name">player_id<em>→ player · 1 a 1 · UNIQUE · null finché non approvi</em></span></li>
+        </ul>
+      </section>
+
+      <section class="item card flow" id="c-signup" data-x="430" data-y="1500">
+        <h2>Flusso <small>dall'iscrizione al login</small></h2>
+        <div class="body">
+          <ol>
+            <li>Il giocatore invia email, nome, cognome, tessera (facoltativa) → <code>PENDING</code></li>
+            <li>L'admin controlla, corregge i dati e approva (<code>APPROVED</code>) o rifiuta (<code>REJECTED</code>)</li>
+            <li>Collega l'account al Player esistente (o ne crea uno) → <code>player_id</code></li>
+            <li>Parte l'email con il link "Imposta la tua password" (token)</li>
+            <li>Il giocatore sceglie la password: da qui entra con email + password</li>
+          </ol>
+          <p>Un solo meccanismo: verifica email, primo accesso e recupero password.</p>
+        </div>
+      </section>
+
+      <section class="item card datacard roles" id="c-roles" data-x="800" data-y="1500">
+        <h2>Ruoli MVP <small>cosa può fare</small></h2>
+        <div class="tbl">
+          <table>
+            <tr><th>Azione</th><th>ADMIN</th><th>PLAYER</th></tr>
+            <tr><td>Proprio profilo e storico</td><td>✓</td><td>✓</td></tr>
+            <tr><td>Modificare la propria email</td><td>✓</td><td>✓</td></tr>
+            <tr><td>Sezione FITeT</td><td>✓</td><td>se ha la tessera</td></tr>
+            <tr><td>Approvare iscrizioni</td><td>✓</td><td>✗</td></tr>
+            <tr><td>Altri profili, tornei</td><td colspan="2">dopo l'MVP</td></tr>
+          </table>
+        </div>
+      </section>
+
+      <aside class="item note" id="n-guest" data-x="800" data-y="1730">
+        <div class="grip"><span>Ospiti</span></div>
+        <ul>
+          <li>Ospite = Player con is_guest = true, senza account e senza tessera</li>
+          <li>Prima di crearlo, cercarlo per nome: niente doppioni</li>
+          <li>Quando prende la tessera: l'admin la inserisce e mette is_guest = false</li>
+          <li>Se si iscrive, si collega l'account al suo Player: lo storico c'è già, perché le partite puntano a player_id</li>
+        </ul>
+      </aside>
+
+      <!-- 8 · PAGINA PERSONALE -->
+      <section class="item card endpoint" id="c-profile" data-x="40" data-y="2060">
+        <h2>Endpoint profilo <small>in PlayerController</small></h2>
+        <div class="body">
+          <code><span class="verb">GET</span> /api/players/{id}/profile</code>
+          <p>Legge solo player, match e match_set. Con il login cambierà solo da dove arriva l'id.</p>
+        </div>
+      </section>
+
+      <aside class="item note question" id="n-profile" data-x="430" data-y="2060">
+        <div class="grip"><span>Domanda aperta · siamo qui</span></div>
+        <strong>Quali dati mostra il profilo?</strong>
+        Per ognuno: c'è già nel DB o va calcolato? (es. partite vinte, % vittorie)
       </aside>
 
       <canvas class="ink" id="ink"></canvas>
@@ -344,7 +433,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
   const layer=document.getElementById('edge-layer');
   const canvas=document.getElementById('ink');
   const statusEl=document.getElementById('status');
-  const W=1420,H=1420;
+  const W=1420,H=2320;
   // stato mostrato: posizioni, tratti {id,c,pts,t}, note {id,x,y,text,t}
   let state={pos:{},strokes:[],notes:[]};
   let mode='move', color='ink', zoom=1;
@@ -572,7 +661,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:1420px;pointer-events:n
     viewport.classList.remove('moving');
     document.querySelectorAll('.note .text').forEach(t=>t.contentEditable='false');
     setStatus('read','Sola lettura: vedi lo schema e i disegni di Luca');
-    document.getElementById('lead').textContent='Lo schema di progettazione di Orion TT fino al passo 5, con gli appunti di Luca. Si aggiorna da solo quando Luca disegna.';
+    document.getElementById('lead').textContent='Lo schema di progettazione di Orion TT fino al passo 8, con gli appunti di Luca. Si aggiorna da solo quando Luca disegna.';
     document.getElementById('hint').textContent='Su telefono usa lo zoom per vedere tutta la lavagna.';
   }
 
