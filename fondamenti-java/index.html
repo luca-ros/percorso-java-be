@@ -214,6 +214,10 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-19", nome: "Design di PlayerProfileDTO e MatchSummaryDTO", risultato: "con aiuto", errore: "Pensava che il DTO leggesse dal database", voto: 7 },
+  { data: "2026-11-19", nome: "Colonne finished_at e fitet_card_number", risultato: "con aiuto", errore: "@JoinColumn su un campo semplice", voto: 6 },
+  { data: "2026-11-19", nome: "Nomi dei method del Repository (Top4, OrderBy, Desc)", risultato: "con aiuto", errore: "🔁 Data tra le condizioni invece che dopo OrderBy; valori (FINISHED) al posto dei tipi nei parameter", voto: 5 },
+  { data: "2026-11-19", nome: "Scelta di String per la tessera FITeT", risultato: "da solo", errore: "", voto: 8 },
   { data: "2026-11-18", nome: "Test di startMatch (404, 409, avvio)", risultato: "da solo", errore: "", voto: 7 },
   { data: "2026-11-18", nome: "Test di updateSet: casi di errore", risultato: "con aiuto", errore: "🔁 Codici HTTP nel Service invece delle eccezioni (2 volte)", voto: 6 },
   { data: "2026-11-18", nome: "Test di updateSet: casi felici", risultato: "con aiuto", errore: "assertThrows dove serve una chiamata normale; 🔁 copia-incolla senza adattare (6 volte)", voto: 5 },
@@ -283,7 +287,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-18";
+const AGGIORNATO = "2026-11-19";
 </script>
 
 <script>
