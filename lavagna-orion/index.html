@@ -404,6 +404,16 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
         </ul>
       </aside>
 
+      <aside class="item note" id="n-premium" data-x="800" data-y="2000">
+        <div class="grip"><span>Dopo l'MVP · premium</span></div>
+        <ul>
+          <li>Premium = funzioni in più (scheda dati FITeT, tornei), non un ruolo</li>
+          <li>Lo paga il singolo giocatore → appartiene all'account</li>
+          <li>Tabella subscriptions: account_id (FK), plan, start_date, end_date, status</li>
+          <li>Una riga per ogni periodo: lo storico dei rinnovi resta</li>
+        </ul>
+      </aside>
+
       <!-- 8 · PAGINA PERSONALE -->
       <section class="item card endpoint" id="c-profile" data-x="40" data-y="2060">
         <h2>Endpoint profilo <small>in PlayerController</small></h2>
