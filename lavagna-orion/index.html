@@ -45,10 +45,10 @@ button.danger{color:var(--rubber)}
 .hint{font-size:13px;color:var(--muted)}
 
 .viewport{position:relative;overflow:auto;height:max(480px,72vh);border:1px solid var(--line);border-radius:12px;background:var(--paper);touch-action:pan-x pan-y}
-.board{position:relative;width:1420px;height:2320px;transform-origin:0 0;
+.board{position:relative;width:1420px;height:2720px;transform-origin:0 0;
   background-image:linear-gradient(var(--grid) 1px,transparent 1px),linear-gradient(90deg,var(--grid) 1px,transparent 1px);background-size:24px 24px}
 svg.edges{position:absolute;inset:0;width:100%;height:100%;pointer-events:none;overflow:visible}
-canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:none;z-index:5}
+canvas.ink{position:absolute;inset:0;width:1420px;height:2720px;pointer-events:none;z-index:5}
 .drawing canvas.ink{pointer-events:auto;cursor:crosshair}
 
 .item{position:absolute;z-index:2;user-select:none;touch-action:none}
@@ -128,6 +128,9 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
 .flow p{margin:0;font-size:12.5px;color:var(--muted)}
 .roles td:not(:first-child),.roles th:not(:first-child){text-align:center}
 .roles td{padding:4px 8px 4px 0;font-family:var(--f-body)}
+.profiledata{max-width:370px}
+.profiledata td{font-family:var(--f-body);vertical-align:top;padding:3px 8px 3px 0}
+.profile-foot{margin:0;padding:0 14px 12px;font-size:12.5px;color:var(--muted)}
 @media (prefers-reduced-motion:reduce){*{transition:none!important}}
 </style>
 </head>
@@ -186,7 +189,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
       <!-- Etichette delle sezioni: stesso ordine dello schizzo del tutor -->
       <div class="sec" style="left:40px;top:20px"><b>1</b>Entità</div>
       <div class="sec" style="left:40px;top:490px"><b>2</b>Dati di esempio</div>
-      <div class="sec" style="left:640px;top:490px"><b>3</b>La partita in chiaro</div>
+      <div class="sec" style="left:690px;top:490px"><b>3</b>La partita in chiaro</div>
       <div class="sec" style="left:40px;top:980px"><b>4</b>Controller e API</div>
       <div class="sec" style="left:430px;top:980px"><b>5</b>Pagina web risultato</div>
       <div class="sec" style="left:800px;top:980px"><b>6</b>Che endpoint creare?</div>
@@ -196,7 +199,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
 
       <!-- 1 · ENTITÀ -->
       <section class="item card entity" id="c-player" data-x="40" data-y="60">
-        <h2>Player <small>tabella player</small></h2>
+        <h2>Player <small>tabella players</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
           <li><span class="key no">·</span><span>first_name</span></li>
@@ -208,20 +211,21 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
       </section>
 
       <section class="item card entity" id="c-match" data-x="420" data-y="60">
-        <h2>Match <small>tabella match</small></h2>
+        <h2>Match <small>tabella matches</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
           <li id="f-p1"><span class="key fk">FK</span><span class="name">player_1_id<em>→ player · @ManyToOne</em></span></li>
           <li id="f-p2"><span class="key fk">FK</span><span class="name">player_2_id<em>→ player · @ManyToOne</em></span></li>
           <li id="f-win"><span class="key fk">FK</span><span class="name">winner_id<em>→ player · null finché non finisce</em></span></li>
           <li><span class="key no">·</span><span class="name">status<em>scheduled · in_progress · finished</em></span></li>
-          <li><span class="key no">·</span><span class="name">created_at<em>dato tecnico: quando nasce la riga</em></span></li>
-          <li><span class="key no">·</span><span class="name">planned_date<em>quando si gioca (la vede l'utente)</em></span></li>
+          <li><span class="key no">·</span><span class="name">created_at<em>dallo schizzo · non nel codice</em></span></li>
+          <li><span class="key no">·</span><span class="name">planned_date<em>dallo schizzo · non nel codice</em></span></li>
+          <li><span class="key no">·</span><span class="name"><span>finished_at<span class="new">nuovo</span></span><em>per le "ultime 4"</em></span></li>
         </ul>
       </section>
 
       <section class="item card entity" id="c-set" data-x="790" data-y="60">
-        <h2>MatchSet <small>tabella match_set</small></h2>
+        <h2>MatchSet <small>tabella match_sets</small></h2>
         <ul class="fields">
           <li><span class="key">PK</span><span>id</span></li>
           <li id="f-match"><span class="key fk">FK</span><span class="name">match_id<em>→ match · @ManyToOne</em></span></li>
@@ -235,16 +239,16 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
       <section class="item card datacard" id="c-data" data-x="40" data-y="530">
         <h2>Tabelle <small>nomi delle colonne nel DB</small></h2>
         <div class="tbl">
-          <table><caption>player</caption>
+          <table><caption>players</caption>
             <tr><th>id</th><th>first_name</th><th>last_name</th></tr>
             <tr><td>1</td><td>Luca</td><td>Rosano</td></tr>
             <tr><td>2</td><td>Alessandro</td><td>Le Mura</td></tr>
           </table>
-          <table><caption>match</caption>
-            <tr><th>id</th><th>player_1_id</th><th>player_2_id</th><th>status</th><th>winner_id</th><th>planned_date</th></tr>
-            <tr><td>1</td><td>1</td><td>2</td><td><span class="fixed">finished</span></td><td><span class="fixed">1</span></td><td>2026-10-31</td></tr>
+          <table><caption>matches</caption>
+            <tr><th>id</th><th>player_1_id</th><th>player_2_id</th><th>status</th><th>winner_id</th><th>planned_date</th><th>finished_at</th></tr>
+            <tr><td>1</td><td>1</td><td>2</td><td><span class="fixed">finished</span></td><td><span class="fixed">1</span></td><td>2026-10-31</td><td>2026-10-31</td></tr>
           </table>
-          <table><caption>match_set</caption>
+          <table><caption>match_sets</caption>
             <tr><th>id</th><th>match_id</th><th>set_number</th><th>player_1_points</th><th>player_2_points</th></tr>
             <tr><td>1</td><td>1</td><td>1</td><td>11</td><td>2</td></tr>
             <tr><td>2</td><td>1</td><td>2</td><td>7</td><td>11</td></tr>
@@ -255,7 +259,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
       </section>
 
       <!-- 3 · LA PARTITA IN CHIARO -->
-      <section class="item card page" id="c-plain" data-x="640" data-y="530">
+      <section class="item card page" id="c-plain" data-x="690" data-y="530">
         <h2>Luca vs Alessandro</h2>
         <div class="score">
           <div class="meta">status: <b>finished</b> · vince Luca 3 set a 1</div>
@@ -275,7 +279,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
         <div class="body">
           <p><span class="verb">GET</span> → serve sapere player, match (match_id) e set (player_points)</p>
           <ul class="files">
-            <li><code>Player.java</code><em>@Entity · tabella player</em></li>
+            <li><code>Player.java</code><em>@Entity · tabella players</em></li>
             <li><code>Match.java</code><em>@Entity</em></li>
             <li><code>MatchSet.java</code><em>@Entity</em></li>
             <li><code>PlayerController.java</code></li>
@@ -362,7 +366,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
           <li><span class="key no">·</span><span class="name">status<em>PENDING · APPROVED · REJECTED</em></span></li>
           <li><span class="key no">·</span><span class="name">first_name · last_name<em>dichiarati all'iscrizione</em></span></li>
           <li><span class="key no">·</span><span class="name">fitet_card_number<em>dichiarata · l'admin la verifica</em></span></li>
-          <li><span class="key fk">FK</span><span class="name">player_id<em>→ player · 1 a 1 · UNIQUE · null finché non approvi</em></span></li>
+          <li><span class="key fk">FK</span><span class="name">player_id<em>→ players · @OneToOne · UNIQUE · null finché non approvi</em></span></li>
         </ul>
       </section>
 
@@ -416,17 +420,47 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
 
       <!-- 8 · PAGINA PERSONALE -->
       <section class="item card endpoint" id="c-profile" data-x="40" data-y="2060">
-        <h2>Endpoint profilo <small>in PlayerController</small></h2>
+        <h2>Endpoint profilo <small>scheda 1 · oggi</small></h2>
         <div class="body">
           <code><span class="verb">GET</span> /api/players/{id}/profile</code>
-          <p>Legge solo player, match e match_set. Con il login cambierà solo da dove arriva l'id.</p>
+          <p>Nome, cognome, tessera, partite in corso, ultime 4 partite finite.</p>
+          <code><span class="verb">GET</span> /api/players/{id}/matches</code>
+          <p>"Vedi tutte": tutte le partite del giocatore.</p>
+          <code><span class="verb">GET</span> /api/matches/{id}</code>
+          <p>Dettaglio con i set: c'è già.</p>
         </div>
       </section>
 
-      <aside class="item note question" id="n-profile" data-x="430" data-y="2060">
+      <section class="item card datacard profiledata" id="c-profile-data" data-x="410" data-y="2060">
+        <h2>Dati del profilo <small>nel DB o calcolati</small></h2>
+        <div class="tbl">
+          <table>
+            <tr><th>Dato</th><th>Fonte</th><th>Come</th></tr>
+            <tr><td>Nome, cognome</td><td>DB</td><td>players</td></tr>
+            <tr><td>Tessera</td><td>DB</td><td>players (confermata)</td></tr>
+            <tr><td>In corso</td><td>DB</td><td>IN_PROGRESS · player_1 o player_2</td></tr>
+            <tr><td>Ultime 4</td><td>DB</td><td>FINISHED · player_1 o player_2 · finished_at più recente · Top4</td></tr>
+            <tr><td>Avversario</td><td><span class="fixed">calcolato</span></td><td>l'altro giocatore rispetto a chi guarda</td></tr>
+            <tr><td>Vinta / persa</td><td><span class="fixed">calcolato</span></td><td>winner_id == id di chi guarda</td></tr>
+            <tr><td>Risultato 3-1</td><td><span class="fixed">calcolato</span></td><td>conta i set vinti in match_sets</td></tr>
+          </table>
+        </div>
+        <p class="profile-foot">I dati calcolati dipendono da chi guarda: si calcolano nel Service.</p>
+      </section>
+
+      <aside class="item note question" id="n-profile" data-x="40" data-y="2490">
         <div class="grip"><span>Domanda aperta · siamo qui</span></div>
-        <strong>Quali dati mostra il profilo?</strong>
-        Per ognuno: c'è già nel DB o va calcolato? (es. partite vinte, % vittorie)
+        <strong>Come si chiama il method di MatchRepository?</strong>
+        Prima versione: status + id del player1, ordinate per finished_at dalla più recente. Poi l'Or con player2.
+      </aside>
+
+      <aside class="item note" id="n-later" data-x="410" data-y="2490">
+        <div class="grip"><span>Profilo · dopo</span></div>
+        <ul>
+          <li>Classifica interna del club (endpoint del club, non del giocatore)</li>
+          <li>Tabella dei progressi e consigli: da definire</li>
+          <li>Scheda Premium: dati FITeT, ultimi incontri, prossimi eventi</li>
+        </ul>
       </aside>
 
       <canvas class="ink" id="ink"></canvas>
@@ -443,7 +477,7 @@ canvas.ink{position:absolute;inset:0;width:1420px;height:2320px;pointer-events:n
   const layer=document.getElementById('edge-layer');
   const canvas=document.getElementById('ink');
   const statusEl=document.getElementById('status');
-  const W=1420,H=2320;
+  const W=1420,H=2720;
   // stato mostrato: posizioni, tratti {id,c,pts,t}, note {id,x,y,text,t}
   let state={pos:{},strokes:[],notes:[]};
   let mode='move', color='ink', zoom=1;
