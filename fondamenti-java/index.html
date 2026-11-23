@@ -214,6 +214,11 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-23", nome: "Firma della derived query findByPlayer1IdOrPlayer2Id", risultato: "con aiuto", errore: "🔁 Tipo al posto del valore: findBy...(List<Match>)", voto: 6 },
+  { data: "2026-11-23", nome: "Injection di MatchRepository e @Mock nel test", risultato: "con aiuto", errore: "", voto: 7 },
+  { data: "2026-11-23", nome: "for con avversario e won (true/false/null)", risultato: "con aiuto", errore: "🔁 new List<MatchSummaryDTO>(...); won = player1 (won è un Boolean); avversario invertito", voto: 4 },
+  { data: "2026-11-23", nome: "Campi di MatchSummaryDTO e PlayerProfileDTO", risultato: "con aiuto", errore: "Campi scritti nel DTO sbagliato", voto: 4 },
+  { data: "2026-11-23", nome: "Debug della GET vuota (riga result.add sparita)", risultato: "con aiuto", errore: "🔁 Righe intorno non ricontrollate dopo il copia-incolla", voto: 6 },
   { data: "2026-11-20", nome: "GET /api/players/{id}/profile (Controller, DTO, Service)", risultato: "con aiuto", errore: "🔁 Player passato al Service invece del solo id (4 volte)", voto: 6 },
   { data: "2026-11-20", nome: "Costruttore di PlayerProfileDTO", risultato: "con aiuto", errore: "🔁 Nome del costruttore diverso dalla classe (3 volte); this.campo senza parameter omonimo", voto: 4 },
   { data: "2026-11-20", nome: "Test del Service e del Controller (6)", risultato: "con aiuto", errore: "🔁 Copia-incolla senza aggiornare URL, nomi e messaggi (6 volte); classe al posto dell'oggetto in thenReturn", voto: 5 },
@@ -292,7 +297,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-20";
+const AGGIORNATO = "2026-11-23";
 </script>
 
 <script>
