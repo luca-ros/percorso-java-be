@@ -185,6 +185,7 @@ const CONCETTI = [
   { gruppo: "I dati", nome: "Enum", stato: "giallo", def: "Un tipo con pochi valori fissi; si scrive NomeEnum.VALORE.", codice: "match.setStatus(MatchStatus.SCHEDULED);", nota: "Come HttpStatus.NOT_FOUND." },
   { gruppo: "I dati", nome: "Optional", stato: "giallo", def: "Un contenitore che ha il valore oppure è vuoto. orElseThrow: dammi il valore, altrimenti lancia l'eccezione.", codice: "Match match = matchRepository.findById(id).orElseThrow(() -> new ...);", nota: "Non è il body: il body è la parte di una richiesta HTTP." },
   { gruppo: "Class e oggetti", nome: "Campo", stato: "giallo", def: "Un dato dentro la class o il DTO; si legge con il getter.", codice: "request.getPlayer1Points()", nota: "I campi sono i dati, getter e setter sono method." },
+  { gruppo: "I dati", nome: "boolean vs Boolean", stato: "giallo", def: "boolean è primitivo (true/false); Boolean è la classe wrapper e può essere anche null.", codice: "Boolean won = null;", nota: "won è true, false o null (partita non finita)." },
   { gruppo: "Class e oggetti", nome: "Getter e setter", stato: "giallo", def: "Il setter assegna un valore al campo, il getter lo legge.", codice: "match.setStatus(MatchStatus.IN_PROGRESS);", nota: "setStatus non guarda lo status: lo cambia." },
   { gruppo: "I dati", nome: "Classe vs tabella", stato: "giallo", def: "Nel codice si usa il nome della classe Java, non quello della tabella MySQL.", codice: "JpaRepository<MatchSet, Long>  // non match_sets", nota: "" },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
@@ -214,6 +215,11 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-25", nome: "Method register nell'AccountService", risultato: "con aiuto", errore: "🔁 get vs set; tipo di ritorno confuso con il parameter; refusi (setLasttName)", voto: 5 },
+  { data: "2026-11-25", nome: "Schema accounts ↔ players e FK in MySQL", risultato: "con aiuto", errore: "", voto: 7 },
+  { data: "2026-11-24", nome: "Campi, costruttore e getter di MatchSummaryDTO (setsWon)", risultato: "con aiuto", errore: "🔁 Tipo al posto del valore (\"Integer\" invece di 0)", voto: 6 },
+  { data: "2026-11-24", nome: "Ripasso a voce del profilo (3 giri)", risultato: "con aiuto", errore: "🔁 @RequestParam per il JSON; @GetMapping e @PathVariable invertiti", voto: 6 },
+  { data: "2026-11-24", nome: "Refactoring notato da solo (player grigio, doppia ricerca)", risultato: "da solo", errore: "", voto: 8 },
   { data: "2026-11-23", nome: "Firma della derived query findByPlayer1IdOrPlayer2Id", risultato: "con aiuto", errore: "🔁 Tipo al posto del valore: findBy...(List<Match>)", voto: 6 },
   { data: "2026-11-23", nome: "Injection di MatchRepository e @Mock nel test", risultato: "con aiuto", errore: "", voto: 7 },
   { data: "2026-11-23", nome: "for con avversario e won (true/false/null)", risultato: "con aiuto", errore: "🔁 new List<MatchSummaryDTO>(...); won = player1 (won è un Boolean); avversario invertito", voto: 4 },
@@ -297,7 +303,7 @@ const VOTI_BASE = [
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
 ];
 
-const AGGIORNATO = "2026-11-23";
+const AGGIORNATO = "2026-11-25";
 </script>
 
 <script>
