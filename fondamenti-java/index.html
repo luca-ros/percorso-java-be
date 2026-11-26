@@ -172,9 +172,9 @@ footer{font-size:.8rem;color:var(--muted)}
 /* ===== DATI: si aggiornano a "fine Java basic" =====
    stato: "rosso" = non chiaro, "giallo" = con aiuto, "verde" = da solo, "" = da valutare */
 const FJ_PUNTO = {
-  data: "2026-11-05",
-  esercizio: "Classe Racket (brand, weight) · costruttore",
-  passo: "Creare l'oggetto con new Racket(\"Butterfly\", 85)."
+  data: "2026-11-26",
+  esercizio: "Classe Coach (package fundamentals, AI disattivata)",
+  passo: "Costruttore con parameter e righe this, poi getter e setter."
 };
 
 const CONCETTI = [
@@ -215,6 +215,12 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-26", nome: "Account (costruttore vuoto + getter/setter)", risultato: "con aiuto", errore: "🔁 Nome del costruttore diverso dalla class (Accont)", voto: 6 },
+  { data: "2026-11-26", nome: "MatchSet e Player → Account (riferimento)", risultato: "con aiuto", errore: "", voto: 6 },
+  { data: "2026-11-26", nome: "Club immutabile", risultato: "con aiuto", errore: "🔁 Costruttore con parameter senza le righe this", voto: 5 },
+  { data: "2026-11-26", nome: "Tournament e getWinnerSide()", risultato: "con aiuto", errore: "🔁 Method void dentro il println (setMaxPlayer)", voto: 5 },
+  { data: "2026-11-26", nome: "Racket e BallBox", risultato: "con aiuto", errore: "🔁 Righe this mancanti (la 3ª volta trovata da solo); Racchettta1; addWeight nel println", voto: 6 },
+  { data: "2026-11-26", nome: "Coach", risultato: "non finito", errore: "", voto: null },
   { data: "2026-11-25", nome: "Method register nell'AccountService", risultato: "con aiuto", errore: "🔁 get vs set; tipo di ritorno confuso con il parameter; refusi (setLasttName)", voto: 5 },
   { data: "2026-11-25", nome: "Schema accounts ↔ players e FK in MySQL", risultato: "con aiuto", errore: "", voto: 7 },
   { data: "2026-11-24", nome: "Campi, costruttore e getter di MatchSummaryDTO (setsWon)", risultato: "con aiuto", errore: "🔁 Tipo al posto del valore (\"Integer\" invece di 0)", voto: 6 },
@@ -301,9 +307,10 @@ const REGISTRO_BASE = [
 const VOTI_BASE = [
   { data: "2026-11-05", comprensione: 6, terminologia: 6, codice: 6, chiarezza: 6 },
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
+  { data: "2026-11-26", comprensione: 6.5, terminologia: 6, codice: null, chiarezza: 6 },
 ];
 
-const AGGIORNATO = "2026-11-25";
+const AGGIORNATO = "2026-11-26";
 </script>
 
 <script>
