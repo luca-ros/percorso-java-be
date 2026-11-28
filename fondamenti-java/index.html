@@ -172,9 +172,9 @@ footer{font-size:.8rem;color:var(--muted)}
 /* ===== DATI: si aggiornano a "fine Java basic" =====
    stato: "rosso" = non chiaro, "giallo" = con aiuto, "verde" = da solo, "" = da valutare */
 const FJ_PUNTO = {
-  data: "2026-11-26",
-  esercizio: "Classe Coach (package fundamentals, AI disattivata)",
-  passo: "Costruttore con parameter e righe this, poi getter e setter."
+  data: "2026-11-27",
+  esercizio: "Classe Team con List<Player> (sfida 5 bis)",
+  passo: "Rileggere la consegna, poi campo players, new ArrayList<>() e .add."
 };
 
 const CONCETTI = [
@@ -186,6 +186,8 @@ const CONCETTI = [
   { gruppo: "I dati", nome: "Optional", stato: "giallo", def: "Un contenitore che ha il valore oppure è vuoto. orElseThrow: dammi il valore, altrimenti lancia l'eccezione.", codice: "Match match = matchRepository.findById(id).orElseThrow(() -> new ...);", nota: "Non è il body: il body è la parte di una richiesta HTTP." },
   { gruppo: "Class e oggetti", nome: "Campo", stato: "giallo", def: "Un dato dentro la class o il DTO; si legge con il getter.", codice: "request.getPlayer1Points()", nota: "I campi sono i dati, getter e setter sono method." },
   { gruppo: "I dati", nome: "boolean vs Boolean", stato: "giallo", def: "boolean è primitivo (true/false); Boolean è la classe wrapper e può essere anche null.", codice: "Boolean won = null;", nota: "won è true, false o null (partita non finita)." },
+  { gruppo: "Class e oggetti", nome: "Oggetto dentro oggetto", stato: "giallo", def: "Un campo può avere come tipo un'altra class; si legge con una catena di getter.", codice: "athlete.getShoe().getBrand().getName()", nota: "Il tipo del campo è la class che ci metti dentro." },
+  { gruppo: "Class e oggetti", nome: "Immutabile", stato: "giallo", def: "Costruttore con parameter e niente setter: dopo la creazione non cambia più.", codice: "new Address(\"Via Roma 1\", \"00100\", \"Roma\")", nota: "Un indirizzo nuovo = un oggetto nuovo." },
   { gruppo: "Class e oggetti", nome: "Getter e setter", stato: "giallo", def: "Il setter assegna un valore al campo, il getter lo legge.", codice: "match.setStatus(MatchStatus.IN_PROGRESS);", nota: "setStatus non guarda lo status: lo cambia." },
   { gruppo: "I dati", nome: "Classe vs tabella", stato: "giallo", def: "Nel codice si usa il nome della classe Java, non quello della tabella MySQL.", codice: "JpaRepository<MatchSet, Long>  // non match_sets", nota: "" },
   { gruppo: "I dati", nome: "Commenti", stato: "", def: "Testo per chi legge il codice: Java lo ignora.", codice: "// minuti previsti in forno", nota: "" },
@@ -215,12 +217,16 @@ const CONCETTI = [
 
 /* risultato: "da solo", "con aiuto", "non finito", "in corso"   voto: 1-10 oppure null */
 const REGISTRO_BASE = [
+  { data: "2026-11-27", nome: "Coach (campo Club)", risultato: "con aiuto", errore: "Consegna non riletta; correzione segnalata e saltata (rename)", voto: 6 },
+  { data: "2026-11-27", nome: "Athlete → Shoe → Brand", risultato: "con aiuto", errore: "🔁 Righe this mancanti in Shoe (corretto subito); consegna non riletta", voto: 6 },
+  { data: "2026-11-27", nome: "Event → Venue → Address", risultato: "da solo", errore: "🔁 Adress (nome della class)", voto: 8 },
+  { data: "2026-11-27", nome: "Team con List<Player>", risultato: "non finito", errore: "calss; campo player vs players", voto: null },
+  { data: "2026-11-27", nome: "Ripasso a voce (20 domande)", risultato: "con aiuto", errore: "Immutabile e this spiegati in modo impreciso", voto: 6 },
   { data: "2026-11-26", nome: "Account (costruttore vuoto + getter/setter)", risultato: "con aiuto", errore: "🔁 Nome del costruttore diverso dalla class (Accont)", voto: 6 },
   { data: "2026-11-26", nome: "MatchSet e Player → Account (riferimento)", risultato: "con aiuto", errore: "", voto: 6 },
   { data: "2026-11-26", nome: "Club immutabile", risultato: "con aiuto", errore: "🔁 Costruttore con parameter senza le righe this", voto: 5 },
   { data: "2026-11-26", nome: "Tournament e getWinnerSide()", risultato: "con aiuto", errore: "🔁 Method void dentro il println (setMaxPlayer)", voto: 5 },
   { data: "2026-11-26", nome: "Racket e BallBox", risultato: "con aiuto", errore: "🔁 Righe this mancanti (la 3ª volta trovata da solo); Racchettta1; addWeight nel println", voto: 6 },
-  { data: "2026-11-26", nome: "Coach", risultato: "non finito", errore: "", voto: null },
   { data: "2026-11-25", nome: "Method register nell'AccountService", risultato: "con aiuto", errore: "🔁 get vs set; tipo di ritorno confuso con il parameter; refusi (setLasttName)", voto: 5 },
   { data: "2026-11-25", nome: "Schema accounts ↔ players e FK in MySQL", risultato: "con aiuto", errore: "", voto: 7 },
   { data: "2026-11-24", nome: "Campi, costruttore e getter di MatchSummaryDTO (setsWon)", risultato: "con aiuto", errore: "🔁 Tipo al posto del valore (\"Integer\" invece di 0)", voto: 6 },
@@ -308,9 +314,10 @@ const VOTI_BASE = [
   { data: "2026-11-05", comprensione: 6, terminologia: 6, codice: 6, chiarezza: 6 },
   { data: "2026-11-06", comprensione: 7, terminologia: 6, codice: 6, chiarezza: 7 },
   { data: "2026-11-26", comprensione: 6.5, terminologia: 6, codice: null, chiarezza: 6 },
+  { data: "2026-11-27", comprensione: 6.5, terminologia: 6, codice: null, chiarezza: 6 },
 ];
 
-const AGGIORNATO = "2026-11-26";
+const AGGIORNATO = "2026-11-27";
 </script>
 
 <script>
